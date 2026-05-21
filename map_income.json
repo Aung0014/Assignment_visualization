@@ -1,0 +1,61 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Median Household Income by State (2022)",
+    "subtitle": "Monthly household income in Malaysian Ringgit (MYR)",
+    "fontSize": 18,
+    "subtitleFontSize": 12,
+    "anchor": "middle"
+  },
+  "width": 700,
+  "height": 550,
+  "data": {"url": "population_clean.csv"},
+  "transform": [
+    {
+      "calculate": "datum.state == 'Putrajaya' ? 'W.P. Putrajaya' : datum.state == 'Kuala Lumpur' ? 'W.P. Kuala Lumpur' : datum.state == 'Labuan' ? 'W.P. Labuan' : datum.state == 'Penang' ? 'Pulau Pinang' : datum.state",
+      "as": "matched_state"
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "url": "administrative_1_state.geojson",
+        "format": {"type": "json", "property": "features"}
+      },
+      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5},
+      "encoding": {"color": {"value": "#f5f5f5"}}
+    },
+    {
+      "transform": [
+        {
+          "lookup": "matched_state",
+          "from": {
+            "data": {
+              "url": "administrative_1_state.geojson",
+              "format": {"type": "json", "property": "features"}
+            },
+            "key": "properties.state",
+            "fields": ["geometry"]
+          }
+        }
+      ],
+      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5},
+      "encoding": {
+        "shape": {"field": "geometry", "type": "geojson"},
+        "color": {
+          "field": "income_median",
+          "type": "quantitative",
+          "scale": {"scheme": "greens", "type": "sequential"},
+          "legend": {"title": "Median Income (MYR)", "format": ","}
+        },
+        "tooltip": [
+          {"field": "state", "title": "State"},
+          {"field": "income_median", "title": "Median Income (MYR)", "format": ","},
+          {"field": "income_mean", "title": "Mean Income (MYR)", "format": ","}
+        ]
+      }
+    }
+  ],
+  "projection": {"type": "mercator"},
+  "config": {"view": {"stroke": null}}
+}

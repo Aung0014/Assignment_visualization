@@ -1,0 +1,47 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Population vs. Median Household Income",
+    "subtitle": "Bubble size represents income per capita",
+    "fontSize": 16,
+    "subtitleFontSize": 11
+  },
+  "width": 600,
+  "height": 400,
+  "data": {"url": "population_clean.csv"},
+  "mark": {"type": "circle", "opacity": 0.7, "stroke": "black", "strokeWidth": 1},
+  "encoding": {
+    "x": {
+      "field": "Total_Pop_2022",
+      "type": "quantitative",
+      "title": "Population (thousands)",
+      "scale": {"zero": false},
+      "axis": {"format": ","}
+    },
+    "y": {
+      "field": "income_median",
+      "type": "quantitative",
+      "title": "Median Household Income (MYR)",
+      "scale": {"zero": false}
+    },
+    "size": {
+      "field": "Income per Capita (Rounded)",
+      "type": "quantitative",
+      "title": "Income per Capita (MYR)",
+      "scale": {"range": [80, 800]},
+      "legend": {"orient": "right"}
+    },
+    "color": {
+      "field": "state",
+      "type": "nominal",
+      "legend": null,
+      "scale": {"scheme": "category20"}
+    },
+    "tooltip": [
+      {"field": "state", "title": "State"},
+      {"field": "Total_Pop_2022", "title": "Population (thousands)", "format": ","},
+      {"field": "income_median", "title": "Median Income (MYR)", "format": ","},
+      {"field": "Income per Capita (Rounded)", "title": "Income per Capita (MYR)"}
+    ]
+  }
+}

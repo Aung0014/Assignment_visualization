@@ -1,0 +1,51 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Income Gap: Mean vs. Median Household Income",
+    "subtitle": "Wider gaps suggest greater income inequality",
+    "fontSize": 16,
+    "subtitleFontSize": 11
+  },
+  "width": 600,
+  "height": 450,
+  "data": {"url": "population_clean.csv"},
+  "transform": [
+    {"calculate": "datum.income_mean - datum.income_median", "as": "income_gap"}
+  ],
+  "layer": [
+    {
+      "mark": {"type": "rule", "color": "#888", "strokeWidth": 2},
+      "encoding": {
+        "y": {"field": "state", "type": "ordinal", "sort": {"field": "income_gap", "order": "descending"}, "title": null},
+        "x": {"field": "income_median", "type": "quantitative", "title": "Monthly Income (MYR)"},
+        "x2": {"field": "income_mean"}
+      }
+    },
+    {
+      "mark": {"type": "circle", "size": 100, "color": "#e15759"},
+      "encoding": {
+        "y": {"field": "state", "type": "ordinal", "sort": {"field": "income_gap", "order": "descending"}},
+        "x": {"field": "income_mean", "type": "quantitative"},
+        "tooltip": [
+          {"field": "state", "title": "State"},
+          {"field": "income_mean", "title": "Mean Income (MYR)", "format": ","},
+          {"field": "income_median", "title": "Median Income (MYR)", "format": ","},
+          {"field": "income_gap", "title": "Gap (MYR)", "format": ","}
+        ]
+      }
+    },
+    {
+      "mark": {"type": "circle", "size": 100, "color": "#4e79a7"},
+      "encoding": {
+        "y": {"field": "state", "type": "ordinal", "sort": {"field": "income_gap", "order": "descending"}},
+        "x": {"field": "income_median", "type": "quantitative"},
+        "tooltip": [
+          {"field": "state", "title": "State"},
+          {"field": "income_mean", "title": "Mean Income (MYR)", "format": ","},
+          {"field": "income_median", "title": "Median Income (MYR)", "format": ","},
+          {"field": "income_gap", "title": "Gap (MYR)", "format": ","}
+        ]
+      }
+    }
+  ]
+}

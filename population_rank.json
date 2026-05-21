@@ -1,0 +1,42 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Malaysian States by Population (2022)",
+    "subtitle": "Ranked from highest to lowest total population",
+    "fontSize": 16,
+    "subtitleFontSize": 11
+  },
+  "width": 600,
+  "height": 400,
+  "data": {"url": "population_clean.csv"},
+  "mark": {"type": "bar", "cornerRadiusEnd": 4},
+  "transform": [
+    {"calculate": "datum.Total_Pop_2022 * 1000", "as": "population_absolute"}
+  ],
+  "encoding": {
+    "y": {
+      "field": "state",
+      "type": "ordinal",
+      "sort": {"op": "sum", "field": "Total_Pop_2022", "order": "descending"},
+      "title": null,
+      "axis": {"labelLimit": 150}
+    },
+    "x": {
+      "field": "Total_Pop_2022",
+      "type": "quantitative",
+      "title": "Population (thousands)",
+      "axis": {"format": ","}
+    },
+    "color": {
+      "field": "Total_Pop_2022",
+      "type": "quantitative",
+      "scale": {"scheme": "teals"},
+      "legend": null
+    },
+    "tooltip": [
+      {"field": "state", "title": "State"},
+      {"field": "population_absolute", "title": "Total Population", "format": ","},
+      {"field": "Total_Pop_2022", "title": "Population (thousands)", "format": ","}
+    ]
+  }
+}

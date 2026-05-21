@@ -1,0 +1,114 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Income Breakdown by State",
+    "subtitle": "Top 8 states by median income • Small multiples for clear comparison",
+    "fontSize": 16,
+    "subtitleFontSize": 11
+  },
+  "width": 120,
+  "height": 180,
+  "data": {
+    "url": "population_clean.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.state == 'Kuala Lumpur' || datum.state == 'Putrajaya' || datum.state == 'Selangor' || datum.state == 'Labuan' || datum.state == 'Johor' || datum.state == 'Penang' || datum.state == 'Melaka' || datum.state == 'Terengganu'"
+    },
+    {
+      "fold": [
+        "income_mean",
+        "income_median",
+        "Annual Household Income"
+      ],
+      "as": [
+        "metric",
+        "value"
+      ]
+    }
+  ],
+  "mark": {
+    "type": "bar",
+    "cornerRadiusEnd": 2,
+    "tooltip": true
+  },
+  "encoding": {
+    "column": {
+      "field": "state",
+      "type": "ordinal",
+      "title": null,
+      "sort": {
+        "op": "mean",
+        "field": "value",
+        "order": "descending"
+      },
+      "header": {
+        "labelAngle": -45,
+        "labelOrient": "bottom",
+        "labelPadding": 5
+      }
+    },
+    "x": {
+      "field": "metric",
+      "type": "nominal",
+      "title": null,
+      "axis": {
+        "labelAngle": -30,
+        "labelExpr": "datum.label == 'income_mean' ? 'Mean' : datum.label == 'income_median' ? 'Median' : 'Annual'",
+        "labelFontSize": 9
+      }
+    },
+    "y": {
+      "field": "value",
+      "type": "quantitative",
+      "title": "Income (MYR)",
+      "axis": {
+        "format": "s",
+        "tickCount": 4
+      }
+    },
+    "color": {
+      "field": "metric",
+      "type": "nominal",
+      "legend": null,
+      "scale": {
+        "domain": [
+          "income_mean",
+          "income_median",
+          "Annual Household Income"
+        ],
+        "range": [
+          "#e15759",
+          "#4e79a7",
+          "#f28e2c"
+        ]
+      }
+    },
+    "tooltip": [
+      {
+        "field": "state",
+        "title": "State"
+      },
+      {
+        "field": "metric",
+        "title": "Metric"
+      },
+      {
+        "field": "value",
+        "title": "Value (MYR)",
+        "format": ","
+      }
+    ]
+  },
+  "config": {
+    "view": {
+      "stroke": "transparent"
+    },
+    "axis": {
+      "domain": false,
+      "ticks": false,
+      "grid": true,
+      "gridColor": "#eeeeee"
+    }
+  }
+}

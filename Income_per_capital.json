@@ -1,0 +1,38 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Income per Capita by State (2022)",
+    "subtitle": "Annual household income divided by total population",
+    "fontSize": 16,
+    "subtitleFontSize": 11
+  },
+  "width": 600,
+  "height": 450,
+  "data": {"url": "population_clean.csv"},
+  "mark": {"type": "point", "filled": true, "size": 120},
+  "encoding": {
+    "y": {
+      "field": "state",
+      "type": "ordinal",
+      "sort": {"op": "mean", "field": "Income per Capita (Rounded)", "order": "descending"},
+      "title": null
+    },
+    "x": {
+      "field": "Income per Capita (Rounded)",
+      "type": "quantitative",
+      "title": "Income per Capita (MYR)",
+      "axis": {"format": ","}
+    },
+    "color": {
+      "field": "Income per Capita (Rounded)",
+      "type": "quantitative",
+      "scale": {"scheme": "goldred"},
+      "legend": null
+    },
+    "tooltip": [
+      {"field": "state", "title": "State"},
+      {"field": "Income per Capita (Rounded)", "title": "Income per Capita (MYR)", "format": ","},
+      {"field": "Total_Pop_2022", "title": "Population (thousands)", "format": ","}
+    ]
+  }
+}

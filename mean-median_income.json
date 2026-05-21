@@ -1,0 +1,49 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Mean vs. Median Household Income by State",
+    "subtitle": "Grouped bars allow direct comparison of central tendency",
+    "fontSize": 16,
+    "subtitleFontSize": 11
+  },
+  "width": 600,
+  "height": 450,
+  "data": {"url": "population_clean.csv"},
+  "transform": [
+    {"fold": ["income_mean", "income_median"], "as": ["measure", "value"]}
+  ],
+  "mark": {"type": "bar", "cornerRadiusEnd": 2},
+  "encoding": {
+    "x": {
+      "field": "state",
+      "type": "ordinal",
+      "sort": {"op": "mean", "field": "value", "order": "descending"},
+      "title": null,
+      "axis": {"labelAngle": -45, "labelLimit": 120}
+    },
+    "xOffset": {"field": "measure"},
+    "y": {
+      "field": "value",
+      "type": "quantitative",
+      "title": "Monthly Income (MYR)",
+      "axis": {"format": ","}
+    },
+    "color": {
+      "field": "measure",
+      "type": "nominal",
+      "title": "Measure",
+      "scale": {
+        "domain": ["income_mean", "income_median"],
+        "range": ["#e15759", "#4e79a7"]
+      },
+      "legend": {
+        "labelExpr": "datum.value == 'income_mean' ? 'Mean' : 'Median'"
+      }
+    },
+    "tooltip": [
+      {"field": "state", "title": "State"},
+      {"field": "measure", "title": "Measure", "labelExpr": "datum.value == 'income_mean' ? 'Mean' : 'Median'"},
+      {"field": "value", "title": "Income (MYR)", "format": ","}
+    ]
+  }
+}

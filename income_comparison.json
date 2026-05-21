@@ -1,0 +1,51 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Income Metrics Heatmap Across States",
+    "subtitle": "Normalised to show relative intensity (z-score)",
+    "fontSize": 16,
+    "subtitleFontSize": 11
+  },
+  "width": 500,
+  "height": 450,
+  "data": {"url": "population_clean.csv"},
+  "transform": [
+    {"fold": ["income_mean", "income_median", "Income per Capita (Rounded)"], "as": ["metric", "value"]},
+    {
+      "window": [{"op": "mean", "field": "value", "as": "mean_val"}, {"op": "stdev", "field": "value", "as": "stdev_val"}],
+      "groupby": ["metric"],
+      "frame": [null, null]
+    },
+    {"calculate": "(datum.value - datum.mean_val) / datum.stdev_val", "as": "zscore"}
+  ],
+  "mark": {"type": "rect", "stroke": "white"},
+  "encoding": {
+    "x": {
+      "field": "metric",
+      "type": "ordinal",
+      "title": null,
+      "axis": {
+        "labelExpr": "datum.value == 'income_mean' ? 'Mean Income' : datum.value == 'income_median' ? 'Median Income' : 'Income per Capita'"
+      }
+    },
+    "y": {
+      "field": "state",
+      "type": "ordinal",
+      "sort": {"op": "mean", "field": "value", "order": "descending"},
+      "title": null
+    },
+    "color": {
+      "field": "zscore",
+      "type": "quantitative",
+      "title": "Standard Deviations from Mean",
+      "scale": {"scheme": "redyellowgreen", "domainMid": 0},
+      "legend": {"orient": "right"}
+    },
+    "tooltip": [
+      {"field": "state", "title": "State"},
+      {"field": "metric", "title": "Metric"},
+      {"field": "value", "title": "Value (MYR)", "format": ","},
+      {"field": "zscore", "title": "Z-Score", "format": ".2f"}
+    ]
+  }
+}

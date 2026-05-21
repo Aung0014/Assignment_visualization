@@ -1,0 +1,63 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Malaysia's Population by State (2022)",
+    "subtitle": "Total Population in thousands",
+    "fontSize": 18,
+    "subtitleFontSize": 12,
+    "anchor": "middle"
+  },
+  "width": 700,
+  "height": 550,
+  "data": {"url": "population_clean.csv"},
+  "transform": [
+    {
+      "calculate": "datum.state == 'Putrajaya' ? 'W.P. Putrajaya' : datum.state == 'Kuala Lumpur' ? 'W.P. Kuala Lumpur' : datum.state == 'Labuan' ? 'W.P. Labuan' : datum.state == 'Penang' ? 'Pulau Pinang' : datum.state",
+      "as": "matched_state"
+    }
+  ],
+  "layer": [
+    {
+      "data": {
+        "url": "administrative_1_state.geojson",
+        "format": {"type": "json", "property": "features"}
+      },
+      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5},
+      "encoding": {
+        "color": {"value": "#f0f0f0"}
+      }
+    },
+    {
+      "transform": [
+        {
+          "lookup": "matched_state",
+          "from": {
+            "data": {
+              "url": "administrative_1_state.geojson",
+              "format": {"type": "json", "property": "features"}
+            },
+            "key": "properties.state",
+            "fields": ["geometry"]
+          }
+        }
+      ],
+      "mark": {"type": "geoshape", "stroke": "white", "strokeWidth": 0.5},
+      "encoding": {
+        "shape": {"field": "geometry", "type": "geojson"},
+        "color": {
+          "field": "Total_Pop_2022",
+          "type": "quantitative",
+          "scale": {"scheme": "blues", "type": "sequential"},
+          "legend": {"title": "Population (thousands)", "format": ","}
+        },
+        "tooltip": [
+          {"field": "state", "title": "State"},
+          {"field": "Total_Pop_2022", "title": "Population (thousands)", "format": ","},
+          {"field": "Income per Capita (Rounded)", "title": "Income per Capita (MYR)"}
+        ]
+      }
+    }
+  ],
+  "projection": {"type": "mercator"},
+  "config": {"view": {"stroke": null}}
+}
