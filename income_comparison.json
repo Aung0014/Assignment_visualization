@@ -8,17 +8,51 @@
   },
   "width": 500,
   "height": 450,
-  "data": {"url": "population_clean.csv"},
+  "data": {
+    "url": "data/population_clean.csv"
+  },
   "transform": [
-    {"fold": ["income_mean", "income_median", "Income per Capita (Rounded)"], "as": ["metric", "value"]},
     {
-      "window": [{"op": "mean", "field": "value", "as": "mean_val"}, {"op": "stdev", "field": "value", "as": "stdev_val"}],
-      "groupby": ["metric"],
-      "frame": [null, null]
+      "fold": [
+        "income_mean",
+        "income_median",
+        "Income per Capita (Rounded)"
+      ],
+      "as": [
+        "metric",
+        "value"
+      ]
     },
-    {"calculate": "(datum.value - datum.mean_val) / datum.stdev_val", "as": "zscore"}
+    {
+      "window": [
+        {
+          "op": "mean",
+          "field": "value",
+          "as": "mean_val"
+        },
+        {
+          "op": "stdev",
+          "field": "value",
+          "as": "stdev_val"
+        }
+      ],
+      "groupby": [
+        "metric"
+      ],
+      "frame": [
+        null,
+        null
+      ]
+    },
+    {
+      "calculate": "(datum.value - datum.mean_val) / datum.stdev_val",
+      "as": "zscore"
+    }
   ],
-  "mark": {"type": "rect", "stroke": "white"},
+  "mark": {
+    "type": "rect",
+    "stroke": "white"
+  },
   "encoding": {
     "x": {
       "field": "metric",
@@ -31,21 +65,44 @@
     "y": {
       "field": "state",
       "type": "ordinal",
-      "sort": {"op": "mean", "field": "value", "order": "descending"},
+      "sort": {
+        "op": "mean",
+        "field": "value",
+        "order": "descending"
+      },
       "title": null
     },
     "color": {
       "field": "zscore",
       "type": "quantitative",
       "title": "Standard Deviations from Mean",
-      "scale": {"scheme": "redyellowgreen", "domainMid": 0},
-      "legend": {"orient": "right"}
+      "scale": {
+        "scheme": "blueorange",
+        "domainMid": 0
+      },
+      "legend": {
+        "orient": "right"
+      }
     },
     "tooltip": [
-      {"field": "state", "title": "State"},
-      {"field": "metric", "title": "Metric"},
-      {"field": "value", "title": "Value (MYR)", "format": ","},
-      {"field": "zscore", "title": "Z-Score", "format": ".2f"}
+      {
+        "field": "state",
+        "title": "State"
+      },
+      {
+        "field": "metric",
+        "title": "Metric"
+      },
+      {
+        "field": "value",
+        "title": "Value (MYR)",
+        "format": ",.0f"
+      },
+      {
+        "field": "zscore",
+        "title": "Z-Score",
+        "format": ".2f"
+      }
     ]
   }
 }

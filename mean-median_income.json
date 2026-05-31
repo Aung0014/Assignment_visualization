@@ -26,7 +26,7 @@
       "field": "value",
       "type": "quantitative",
       "title": "Monthly Income (MYR)",
-      "axis": {"format": ","}
+      "axis": {"format": ",.0f"}
     },
     "color": {
       "field": "measure",
@@ -43,7 +43,7 @@
     "tooltip": [
       {"field": "state", "title": "State"},
       {"field": "measure", "title": "Measure", "labelExpr": "datum.value == 'income_mean' ? 'Mean' : 'Median'"},
-      {"field": "value", "title": "Income (MYR)", "format": ","}
+      {"field": "value", "title": "Income (MYR)", "format": ",.0f"}
     ]
   }
 }

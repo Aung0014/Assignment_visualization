@@ -1,0 +1,154 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Population Concentration by State",
+    "subtitle": "Bars = state population \u2022 Red line = cumulative % of national total",
+    "fontSize": 16,
+    "subtitleFontSize": 11
+  },
+  "width": "container",
+  "height": 400,
+  "data": {
+    "url": "population_clean.csv"
+  },
+  "transform": [
+    {
+      "window": [
+        {
+          "op": "sum",
+          "field": "Total_Pop_2022",
+          "as": "national_pop"
+        }
+      ],
+      "frame": [
+        null,
+        null
+      ]
+    },
+    {
+      "window": [
+        {
+          "op": "sum",
+          "field": "Total_Pop_2022",
+          "as": "cumulative_pop"
+        }
+      ],
+      "sort": [
+        {
+          "field": "Total_Pop_2022",
+          "order": "descending"
+        }
+      ],
+      "frame": [
+        null,
+        0
+      ]
+    },
+    {
+      "calculate": "datum.cumulative_pop / datum.national_pop * 100",
+      "as": "cumulative_pct"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "cornerRadiusEnd": 4,
+        "color": "#4e79a7",
+        "tooltip": true
+      },
+      "encoding": {
+        "x": {
+          "field": "state",
+          "type": "ordinal",
+          "sort": {
+            "op": "sum",
+            "field": "Total_Pop_2022",
+            "order": "descending"
+          },
+          "title": null,
+          "axis": {
+            "labelAngle": -45,
+            "labelLimit": 120
+          }
+        },
+        "y": {
+          "field": "Total_Pop_2022",
+          "type": "quantitative",
+          "title": "Population (thousands)",
+          "axis": {
+            "format": ",.0f",
+            "labelOverlap": "greedy"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "state",
+            "title": "State"
+          },
+          {
+            "field": "Total_Pop_2022",
+            "title": "Population (thousands)",
+            "format": ",.0f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "line",
+        "color": "#e15759",
+        "strokeWidth": 3,
+        "point": {
+          "filled": true,
+          "size": 60,
+          "color": "#e15759"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "state",
+          "type": "ordinal",
+          "sort": {
+            "op": "sum",
+            "field": "Total_Pop_2022",
+            "order": "descending"
+          },
+          "title": null
+        },
+        "y": {
+          "field": "cumulative_pct",
+          "type": "quantitative",
+          "title": "Cumulative % of National Population",
+          "scale": {
+            "domain": [
+              0,
+              105
+            ]
+          },
+          "axis": {
+            "format": ".0f",
+            "titleColor": "#e15759",
+            "labelOverlap": "greedy"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "state",
+            "title": "State"
+          },
+          {
+            "field": "cumulative_pct",
+            "title": "Cumulative %",
+            "format": ".1f"
+          }
+        ]
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "y": "independent"
+    }
+  }
+}
