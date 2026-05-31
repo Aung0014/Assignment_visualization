@@ -8,40 +8,79 @@
   },
   "width": 600,
   "height": 400,
-  "data": {"url": "population_clean.csv"},
-  "mark": {"type": "circle", "opacity": 0.7, "stroke": "black", "strokeWidth": 1},
+  "data": {
+    "url": "population_clean.csv"
+  },
+  "mark": {
+    "type": "circle",
+    "opacity": 0.7,
+    "stroke": "black",
+    "strokeWidth": 1
+  },
   "encoding": {
     "x": {
       "field": "Total_Pop_2022",
       "type": "quantitative",
       "title": "Population (thousands)",
-      "scale": {"zero": false},
-      "axis": {"format": ","}
+      "scale": {
+        "zero": false
+      },
+      "axis": {
+        "format": ",.0f"
+      }
     },
     "y": {
       "field": "income_median",
       "type": "quantitative",
       "title": "Median Household Income (MYR)",
-      "scale": {"zero": false}
+      "scale": {
+        "zero": false
+      },
+      "axis": {
+        "format": ",.0f"
+      }
     },
     "size": {
       "field": "Income per Capita (Rounded)",
       "type": "quantitative",
       "title": "Income per Capita (MYR)",
-      "scale": {"range": [80, 800]},
-      "legend": {"orient": "right"}
+      "scale": {
+        "range": [
+          80,
+          800
+        ]
+      },
+      "legend": {
+        "orient": "right"
+      }
     },
     "color": {
       "field": "state",
       "type": "nominal",
       "legend": null,
-      "scale": {"scheme": "category20"}
+      "scale": {
+        "scheme": "category20"
+      }
     },
     "tooltip": [
-      {"field": "state", "title": "State"},
-      {"field": "Total_Pop_2022", "title": "Population (thousands)", "format": ","},
-      {"field": "income_median", "title": "Median Income (MYR)", "format": ","},
-      {"field": "Income per Capita (Rounded)", "title": "Income per Capita (MYR)"}
+      {
+        "field": "state",
+        "title": "State"
+      },
+      {
+        "field": "Total_Pop_2022",
+        "title": "Population (thousands)",
+        "format": ",.0f"
+      },
+      {
+        "field": "income_median",
+        "title": "Median Income (MYR)",
+        "format": ",.0f"
+      },
+      {
+        "field": "Income per Capita (Rounded)",
+        "title": "Income per Capita (MYR)"
+      }
     ]
   }
 }

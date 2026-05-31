@@ -1,630 +1,734 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Malaysia: Population & Income Landscape 2022</title>
-<script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
-<script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --primary: #1a3a5c;
-    --secondary: #e15759;
-    --accent: #4e79a7;
-    --warm: #f28e2c;
-    --bg: #fafbfc;
-    --text: #2d3748;
-    --text-light: #718096;
-    --border: #e2e8f0;
-    --card-bg: #ffffff;
-    --shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-    --shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malaysia: Population & Income Landscape 2022</title>
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #1a3a5c;
+      --secondary: #e15759;
+      --accent: #4e79a7;
+      --warm: #f28e2c;
+      --bg: #fafbfc;
+      --text: #2d3748;
+      --text-light: #718096;
+      --border: #e2e8f0;
+      --card-bg: #ffffff;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  body {
-    font-family: 'Inter', -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-  .hero {
-    background: linear-gradient(135deg, #1a3a5c 0%, #2d5a87 50%, #4e79a7 100%);
-    color: white;
-    padding: 80px 20px 100px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
+    .hero {
+      background: linear-gradient(135deg, #1a3a5c 0%, #2d5a87 50%, #4e79a7 100%);
+      color: white;
+      padding: 80px 20px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-  .hero::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-    opacity: 0.3;
-  }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.3;
+    }
 
-  .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+    }
 
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: 3.2rem;
-    font-weight: 700;
-    margin-bottom: 16px;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
 
-  .hero .subtitle {
-    font-size: 1.25rem;
-    font-weight: 300;
-    opacity: 0.9;
-    max-width: 600px;
-    margin: 0 auto 30px;
-  }
+    .hero .subtitle {
+      font-size: 1.25rem;
+      font-weight: 300;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
 
-  .hero-meta {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-    font-size: 0.9rem;
-    opacity: 0.8;
-  }
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
 
-  .hero-meta span { display: flex; align-items: center; gap: 6px; }
+    .hero-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-  .nav-dots {
-    position: fixed;
-    right: 24px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
+    .nav-dots {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
-  .nav-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--border);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    border: 2px solid transparent;
-  }
+    .nav-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--border);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
 
-  .nav-dot.active {
-    background: var(--primary);
-    transform: scale(1.3);
-    border-color: white;
-    box-shadow: 0 0 0 3px rgba(26,58,92,0.2);
-  }
+    .nav-dot.active {
+      background: var(--primary);
+      transform: scale(1.3);
+      border-color: white;
+      box-shadow: 0 0 0 3px rgba(26, 58, 92, 0.2);
+    }
 
-  .section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 60px 24px;
-    position: relative;
-  }
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px;
+      position: relative;
+    }
 
-  .section-header {
-    text-align: center;
-    margin-bottom: 48px;
-  }
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
 
-  .section-number {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    background: var(--primary);
-    color: white;
-    border-radius: 50%;
-    line-height: 40px;
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 16px;
-  }
+    .section-number {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      line-height: 40px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+    }
 
-  .section h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    color: var(--primary);
-    margin-bottom: 12px;
-  }
+    .section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
 
-  .section .lead {
-    font-size: 1.15rem;
-    color: var(--text-light);
-    max-width: 700px;
-    margin: 0 auto;
-    line-height: 1.7;
-  }
+    .section .lead {
+      font-size: 1.15rem;
+      color: var(--text-light);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
 
-  .card {
-    background: var(--card-bg);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
-    padding: 32px;
-    margin-bottom: 32px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 32px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-  .card:hover {
-    box-shadow: var(--shadow-lg);
-    transform: translateY(-2px);
-  }
+    .card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
 
-  .card-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem;
-    color: var(--primary);
-    margin-bottom: 8px;
-  }
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
 
-  .card-desc {
-    color: var(--text-light);
-    font-size: 0.95rem;
-    margin-bottom: 24px;
-    line-height: 1.6;
-  }
+    .card-desc {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
 
-  .grid-2 {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-    gap: 32px;
-  }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 32px;
+    }
 
-  .grid-1 {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 32px;
-  }
+    .grid-1 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
 
-  /* FIX: Full-width card for small multiples */
-  .card-fullwidth {
-    max-width: 100%;
-  }
+    /* FIX: Full-width card for small multiples */
+    .card-fullwidth {
+      max-width: 100%;
+    }
 
-  .viz-container {
-    width: 100%;
-    min-height: 450px;
-  }
+    .viz-container {
+      width: 100%;
+      min-height: 450px;
+    }
 
-  /* FIX: Larger container for small multiples */
-  .viz-container-large {
-    width: 100%;
-    min-height: 650px;
-  }
+    /* FIX: Larger container for small multiples */
+    .viz-container-large {
+      width: 100%;
+      min-height: 380px;
+    }
 
-  .viz-container svg {
-    display: block;
-    margin: 0 auto;
-  }
+    .viz-container svg {
+      display: block;
+      margin: 0 auto;
+    }
 
-  .insight {
-    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-    border-left: 4px solid var(--accent);
-    padding: 20px 24px;
-    border-radius: 0 12px 12px 0;
-    margin: 24px 0;
-    font-size: 0.95rem;
-    line-height: 1.7;
-  }
+    .insight {
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      border-left: 4px solid var(--accent);
+      padding: 20px 24px;
+      border-radius: 0 12px 12px 0;
+      margin: 24px 0;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
 
-  .insight strong { color: var(--primary); }
+    .insight strong {
+      color: var(--primary);
+    }
 
-  .insight-highlight {
-    background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
-    border-left-color: var(--secondary);
-  }
+    .insight-highlight {
+      background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
+      border-left-color: var(--secondary);
+    }
 
-  .insight-warm {
-    background: linear-gradient(135deg, #fffaf0 0%, #feebc8 100%);
-    border-left-color: var(--warm);
-  }
+    .insight-warm {
+      background: linear-gradient(135deg, #fffaf0 0%, #feebc8 100%);
+      border-left-color: var(--warm);
+    }
 
-  .stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin: 40px 0;
-  }
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 40px 0;
+    }
 
-  .stat-box {
-    background: var(--card-bg);
-    padding: 24px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: var(--shadow);
-    border-top: 3px solid var(--accent);
-  }
+    .stat-box {
+      background: var(--card-bg);
+      padding: 24px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      border-top: 3px solid var(--accent);
+    }
 
-  .stat-box:nth-child(2) { border-top-color: var(--secondary); }
-  .stat-box:nth-child(3) { border-top-color: var(--warm); }
-  .stat-box:nth-child(4) { border-top-color: #2ec4b6; }
+    .stat-box:nth-child(2) {
+      border-top-color: var(--secondary);
+    }
 
-  .stat-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 4px;
-  }
+    .stat-box:nth-child(3) {
+      border-top-color: var(--warm);
+    }
 
-  .stat-label {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
+    .stat-box:nth-child(4) {
+      border-top-color: #2ec4b6;
+    }
 
-  .footer {
-    background: var(--primary);
-    color: white;
-    padding: 48px 24px;
-    text-align: center;
-    margin-top: 60px;
-  }
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 4px;
+    }
 
-  .footer p {
-    opacity: 0.8;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-  }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-  .footer .credits {
-    margin-top: 16px;
-    padding-top: 16px;
-    border-top: 1px solid rgba(255,255,255,0.2);
-    font-size: 0.8rem;
-    opacity: 0.6;
-  }
+    .footer {
+      background: var(--primary);
+      color: white;
+      padding: 48px 24px;
+      text-align: center;
+      margin-top: 60px;
+    }
 
-  .spec-link {
-    display: inline-block;
-    margin-top: 12px;
-    font-size: 0.8rem;
-    color: var(--accent);
-    text-decoration: none;
-    border: 1px solid var(--border);
-    padding: 4px 12px;
-    border-radius: 20px;
-    transition: all 0.2s ease;
-  }
+    .footer p {
+      opacity: 0.8;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+    }
 
-  .spec-link:hover {
-    background: var(--accent);
-    color: white;
-    border-color: var(--accent);
-  }
+    .footer .credits {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
 
-  @media (max-width: 768px) {
-    .hero h1 { font-size: 2rem; }
-    .hero .subtitle { font-size: 1rem; }
-    .section { padding: 40px 16px; }
-    .grid-2 { grid-template-columns: 1fr; }
-    .card { padding: 20px; }
-    .nav-dots { display: none; }
-    .stats-row { grid-template-columns: repeat(2, 1fr); }
-    .viz-container-large { min-height: 500px; }
-  }
+    .spec-link {
+      display: inline-block;
+      margin-top: 12px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 20px;
+      transition: all 0.2s ease;
+    }
 
-  html { scroll-behavior: smooth; }
+    .spec-link:hover {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
 
-  .fade-in {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
 
-  .fade-in.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-</style>
+      .hero .subtitle {
+        font-size: 1rem;
+      }
+
+      .section {
+        padding: 40px 16px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .nav-dots {
+        display: none;
+      }
+
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .viz-container-large {
+        min-height: 500px;
+      }
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+  <base target="_blank">
+<base target="_blank">
 <base target="_blank">
 </head>
+
 <body>
 
-<div class="nav-dots">
-  <div class="nav-dot active" onclick="scrollToSection('hero')"></div>
-  <div class="nav-dot" onclick="scrollToSection('population')"></div>
-  <div class="nav-dot" onclick="scrollToSection('income')"></div>
-  <div class="nav-dot" onclick="scrollToSection('comparison')"></div>
-  <div class="nav-dot" onclick="scrollToSection('structure')"></div>
-  <div class="nav-dot" onclick="scrollToSection('conclusion')"></div>
-</div>
-
-<section id="hero" class="hero">
-  <div class="hero-content">
-    <h1>Malaysia's Population & Income Landscape</h1>
-    <p class="subtitle">Exploring the economic and demographic diversity across Malaysian states in 2022</p>
-    <div class="hero-meta">
-      <span>&#128202; 10+ Visualisations</span>
-      <span>&#128506; Interactive Maps</span>
-      <span>&#128197; 2022 Data</span>
-      <span>&#127470;&#127475; Malaysia Focus</span>
-    </div>
-  </div>
-</section>
-
-<section id="population" class="section">
-  <div class="section-header fade-in">
-    <div class="section-number">1</div>
-    <h2>Who Lives Where?</h2>
-    <p class="lead">Malaysia's population is unevenly distributed, with the Klang Valley and Johor dominating while smaller states like Perlis and Labuan remain tiny by comparison.</p>
+  <div class="nav-dots">
+    <div class="nav-dot active" onclick="scrollToSection('hero')"></div>
+    <div class="nav-dot" onclick="scrollToSection('population')"></div>
+    <div class="nav-dot" onclick="scrollToSection('income')"></div>
+    <div class="nav-dot" onclick="scrollToSection('comparison')"></div>
+    <div class="nav-dot" onclick="scrollToSection('structure')"></div>
+    <div class="nav-dot" onclick="scrollToSection('conclusion')"></div>
   </div>
 
-  <div class="stats-row fade-in">
-    <div class="stat-box"><div class="stat-value">32.7M</div><div class="stat-label">Total Population</div></div>
-    <div class="stat-box"><div class="stat-value">16</div><div class="stat-label">States & Territories</div></div>
-    <div class="stat-box"><div class="stat-value">6.6M</div><div class="stat-label">Selangor (Largest)</div></div>
-    <div class="stat-box"><div class="stat-value">100K</div><div class="stat-label">Labuan (Smallest)</div></div>
-  </div>
-
-  <div class="grid-2">
-    <div class="card fade-in">
-      <h3 class="card-title">Population by State</h3>
-      <p class="card-desc">Ranked bar chart showing the dramatic population differences across states. Selangor alone holds over 20% of Malaysia's population.</p>
-      <div id="viz-pop-rank" class="viz-container"></div>
-      <a href="01-population-rank.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
-    </div>
-
-    <div class="card fade-in">
-      <h3 class="card-title">Geographic Distribution</h3>
-      <p class="card-desc">Choropleth map revealing population concentration. The west coast clearly dominates Malaysia's demographic landscape.</p>
-      <div id="viz-map-pop" class="viz-container"></div>
-      <a href="02-map-population.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
-    </div>
-  </div>
-
-  <div class="insight fade-in">
-    <strong>Key Insight:</strong> The top 3 states by population (Selangor, Johor, Sabah) account for nearly 50% of Malaysia's total population. This concentration drives infrastructure demands and economic policy priorities at the federal level.
-  </div>
-</section>
-
-<section id="income" class="section">
-  <div class="section-header fade-in">
-    <div class="section-number">2</div>
-    <h2>The Income Divide</h2>
-    <p class="lead">Household income varies dramatically across Malaysia. Federal territories lead, while rural states in the east and north face persistent economic challenges.</p>
-  </div>
-
-  <div class="grid-2">
-    <div class="card fade-in">
-      <h3 class="card-title">Median Income Map</h3>
-      <p class="card-desc">Spatial view of median household income. Putrajaya and KL tower above all others, reflecting their administrative and commercial roles.</p>
-      <div id="viz-map-income" class="viz-container"></div>
-      <a href="03-map-income.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
-    </div>
-
-    <div class="card fade-in">
-      <h3 class="card-title">Mean vs. Median</h3>
-      <p class="card-desc">Grouped bars reveal the gap between mean and median income. Where the gap is wide, inequality is likely higher—notice Labuan and Putrajaya.</p>
-      <div id="viz-mean-median" class="viz-container"></div>
-      <a href="04-mean-vs-median.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
-    </div>
-  </div>
-
-  <div class="grid-1">
-    <div class="card fade-in">
-      <h3 class="card-title">Income Gap Analysis</h3>
-      <p class="card-desc">Dumbbell plot showing the spread between mean and median. A wider gap suggests greater income inequality within that state.</p>
-      <div id="viz-income-gap" class="viz-container"></div>
-      <a href="05-income-gap.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
-    </div>
-  </div>
-
-  <div class="insight insight-highlight fade-in">
-    <strong>Inequality Signal:</strong> Labuan shows the largest mean-median gap (MYR 1,346), suggesting a small wealthy population skewing the average. Putrajaya and Kuala Lumpur also show significant gaps, reflecting their roles as hubs for high-income professionals.
-  </div>
-</section>
-
-<section id="comparison" class="section">
-  <div class="section-header fade-in">
-    <div class="section-number">3</div>
-    <h2>Connecting the Dots</h2>
-    <p class="lead">How do population size and income relate? Does a larger state mean richer residents? The data reveals surprising patterns.</p>
-  </div>
-
-  <div class="grid-2">
-    <div class="card fade-in">
-      <h3 class="card-title">Population vs. Income</h3>
-      <p class="card-desc">Bubble chart exploring the relationship between population, median income, and income per capita. Bubble size shows per-capita income.</p>
-      <div id="viz-pop-income" class="viz-container"></div>
-      <a href="06-population-vs-income.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
-    </div>
-
-    <div class="card fade-in">
-      <h3 class="card-title">Income per Capita</h3>
-      <p class="card-desc">Dot plot ranking states by income per capita. Small territories (Labuan, Putrajaya) lead due to high earners and small resident populations.</p>
-      <div id="viz-per-capita" class="viz-container"></div>
-      <a href="07-income-per-capita.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
-    </div>
-  </div>
-
-  <div class="grid-1">
-    <div class="card fade-in">
-      <h3 class="card-title">Income Heatmap</h3>
-      <p class="card-desc">Normalised heatmap (z-scores) comparing three income metrics across all states. Red indicates above-average, green below-average.</p>
-      <div id="viz-heatmap" class="viz-container"></div>
-      <a href="08-income-heatmap.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
-    </div>
-  </div>
-
-  <div class="grid-1">
-    <div class="card fade-in">
-      <h3 class="card-title">Income Breakdown</h3>
-      <p class="card-desc">Small multiples showing mean, median, and annual household income for each state. Enables direct state-to-state comparison.</p>
-      <div id="viz-distribution" class="viz-container-large"></div>
-      <a href="09-income-distribution.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
-    </div>
-  </div>
-
-  <div class="insight insight-warm fade-in">
-    <strong>Surprising Finding:</strong> Despite having Malaysia's largest population, Selangor ranks only middle-tier in income per capita. Conversely, tiny Labuan and Putrajaya dominate per-capita metrics due to their specialised economic functions and small residential bases.
-  </div>
-</section>
-
-<section id="structure" class="section">
-  <div class="section-header fade-in">
-    <div class="section-number">4</div>
-    <h2>Age & Demographics</h2>
-    <p class="lead">Age structure varies significantly across states, with implications for healthcare, education, and future workforce planning.</p>
-  </div>
-
-  <div class="grid-1">
-    <div class="card fade-in">
-      <h3 class="card-title">Age Structure by State</h3>
-      <p class="card-desc">Stacked bars showing the proportion of four key age cohorts. States are sorted by elderly (60+) population share—an indicator of aging pressure.</p>
-      <div id="viz-age" class="viz-container"></div>
-      <a href="10-age-structure.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
-    </div>
-  </div>
-
-  <div class="insight fade-in">
-    <strong>Demographic Divide:</strong> Perak has the highest elderly proportion (16.3%), signaling future healthcare and pension pressures. In contrast, Selangor and Johor maintain younger profiles, suggesting stronger future workforce potential.
-  </div>
-</section>
-
-<section id="conclusion" class="section">
-  <div class="section-header fade-in">
-    <div class="section-number">5</div>
-    <h2>What This Tells Us</h2>
-    <p class="lead">Malaysia's states are not just different in size—they are economically and demographically distinct nations within a nation.</p>
-  </div>
-
-  <div class="card fade-in" style="max-width: 800px; margin: 0 auto 32px;">
-    <h3 class="card-title" style="text-align: center;">Summary Findings</h3>
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 24px;">
-      <div style="padding: 20px; background: #f7fafc; border-radius: 12px;">
-        <strong style="color: var(--primary); display: block; margin-bottom: 8px;">&#127963; Urban Premium</strong>
-        Federal territories (KL, Putrajaya, Labuan) consistently outearn states, reflecting the urban economic advantage.
-      </div>
-      <div style="padding: 20px; background: #f7fafc; border-radius: 12px;">
-        <strong style="color: var(--primary); display: block; margin-bottom: 8px;">&#128202; Scale != Wealth</strong>
-        Large states like Selangor and Johor don't necessarily have the highest per-capita incomes. Population scale and wealth are decoupled.
-      </div>
-      <div style="padding: 20px; background: #f7fafc; border-radius: 12px;">
-        <strong style="color: var(--primary); display: block; margin-bottom: 8px;">&#9888; Inequality Signals</strong>
-        Wide mean-median gaps in Labuan, Putrajaya, and KL suggest significant internal income disparities despite high averages.
-      </div>
-      <div style="padding: 20px; background: #f7fafc; border-radius: 12px;">
-        <strong style="color: var(--primary); display: block; margin-bottom: 8px;">&#128116; Aging Challenge</strong>
-        States like Perak face aging demographics, while Selangor and Johor maintain younger, more dynamic populations.
+  <section id="hero" class="hero">
+    <div class="hero-content">
+      <h1>Malaysia's Population & Income Landscape</h1>
+      <p class="subtitle">Exploring the economic and demographic diversity across Malaysian states in 2022</p>
+      <div class="hero-meta">
+        <span>&#128202; 10+ Visualisations</span>
+        <span>&#128506; Interactive Maps</span>
+        <span>&#128197; 2022 Data</span>
+        <span>&#127470;&#127475; Malaysia Focus</span>
       </div>
     </div>
-  </div>
+  </section>
 
-  <div class="insight fade-in" style="max-width: 800px; margin: 0 auto;">
-    <strong>For Policymakers:</strong> These visualisations highlight the need for state-specific economic strategies. A one-size-fits-all federal policy may fail to address the unique challenges of rural, aging, or high-inequality states. Targeted interventions—such as eldercare infrastructure in Perak or income support in Kelantan—could be more effective than blanket approaches.
-  </div>
-</section>
+  <section id="population" class="section">
+    <div class="section-header fade-in">
+      <div class="section-number">1</div>
+      <h2>Who Lives Where?</h2>
+      <p class="lead">Malaysia's population is unevenly distributed, with the Klang Valley and Johor dominating while
+        smaller states like Perlis and Labuan remain tiny by comparison.</p>
+    </div>
 
-<footer class="footer">
-  <p><strong>Malaysia Population & Income Dashboard</strong></p>
-  <p>Data sourced from Department of Statistics Malaysia (2022)</p>
-  <p>Created for FIT2179 Data Visualisation, Monash University Malaysia</p>
-  <div class="credits">
-    <p>Built with Vega-Lite | Pure CSS | Inter & Playfair Display typography</p>
-    <p>GeoJSON: Malaysia Open Data (github.com/mptwaktusolat/jakim.geojson)</p>
-  </div>
-</footer>
+    <div class="stats-row fade-in">
+      <div class="stat-box">
+        <div class="stat-value">32.7M</div>
+        <div class="stat-label">Total Population</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">16</div>
+        <div class="stat-label">States & Territories</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">6.6M</div>
+        <div class="stat-label">Selangor (Largest)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value">100K</div>
+        <div class="stat-label">Labuan (Smallest)</div>
+      </div>
+    </div>
 
-<script>
-// ===== EMBEDDED FALLBACK DATA =====
-const DATA_CLEAN = [{"state": "Johor", "date": "1/1/2022", "income_mean": 8517, "income_median": 6879, "Total_Pop_2022": 1325.6, "Annual Household Income": 82548, "Income per Capita (MYR)": 62.27217864, "Income per Capita (Rounded)": 62}, {"state": "Kedah", "date": "1/2/2022", "income_mean": 5550, "income_median": 4402, "Total_Pop_2022": 989.5, "Annual Household Income": 52824, "Income per Capita (MYR)": 53.38453765, "Income per Capita (Rounded)": 53}, {"state": "Kelantan", "date": "1/3/2022", "income_mean": 4885, "income_median": 3614, "Total_Pop_2022": 707.3, "Annual Household Income": 43368, "Income per Capita (MYR)": 61.31485932, "Income per Capita (Rounded)": 61}, {"state": "Melaka", "date": "1/4/2022", "income_mean": 8057, "income_median": 6210, "Total_Pop_2022": 419.4, "Annual Household Income": 74520, "Income per Capita (MYR)": 177.6824034, "Income per Capita (Rounded)": 178}, {"state": "Negeri Sembilan", "date": "1/5/2022", "income_mean": 6788, "income_median": 5226, "Total_Pop_2022": 500.4, "Annual Household Income": 62712, "Income per Capita (MYR)": 125.323741, "Income per Capita (Rounded)": 125}, {"state": "Pahang", "date": "1/6/2022", "income_mean": 5777, "income_median": 4753, "Total_Pop_2022": 523.8, "Annual Household Income": 57036, "Income per Capita (MYR)": 108.8888889, "Income per Capita (Rounded)": 109}, {"state": "Perak", "date": "1/7/2022", "income_mean": 5779, "income_median": 4494, "Total_Pop_2022": 1631.5, "Annual Household Income": 53928, "Income per Capita (MYR)": 33.05424456, "Income per Capita (Rounded)": 33}, {"state": "Perlis", "date": "1/8/2022", "income_mean": 5664, "income_median": 4713, "Total_Pop_2022": 125.5, "Annual Household Income": 56556, "Income per Capita (MYR)": 450.6454183, "Income per Capita (Rounded)": 451}, {"state": "Penang", "date": "1/9/2022", "income_mean": 8267, "income_median": 6502, "Total_Pop_2022": 808.6, "Annual Household Income": 78024, "Income per Capita (MYR)": 96.49270344, "Income per Capita (Rounded)": 96}, {"state": "Sabah", "date": "1/10/2022", "income_mean": 6171, "income_median": 4577, "Total_Pop_2022": 698.1, "Annual Household Income": 54924, "Income per Capita (MYR)": 78.67640739, "Income per Capita (Rounded)": 79}, {"state": "Sarawak", "date": "1/11/2022", "income_mean": 6457, "income_median": 4978, "Total_Pop_2022": 1037.0, "Annual Household Income": 59736, "Income per Capita (MYR)": 57.60462874, "Income per Capita (Rounded)": 58}, {"state": "Selangor", "date": "1/12/2022", "income_mean": 12233, "income_median": 9983, "Total_Pop_2022": 1696.4, "Annual Household Income": 119796, "Income per Capita (MYR)": 70.61777883, "Income per Capita (Rounded)": 71}, {"state": "Terengganu", "date": "1/13/2022", "income_mean": 7248, "income_median": 5878, "Total_Pop_2022": 418.8, "Annual Household Income": 70536, "Income per Capita (MYR)": 168.4240688, "Income per Capita (Rounded)": 168}, {"state": "Kuala Lumpur", "date": "1/14/2022", "income_mean": 13325, "income_median": 10234, "Total_Pop_2022": 982.9, "Annual Household Income": 122808, "Income per Capita (MYR)": 124.9445518, "Income per Capita (Rounded)": 125}, {"state": "Labuan", "date": "1/15/2022", "income_mean": 8250, "income_median": 6904, "Total_Pop_2022": 52.9, "Annual Household Income": 82848, "Income per Capita (MYR)": 1566.124764, "Income per Capita (Rounded)": 1566}, {"state": "Putrajaya", "date": "1/16/2022", "income_mean": 13473, "income_median": 10056, "Total_Pop_2022": 73.4, "Annual Household Income": 120672, "Income per Capita (MYR)": 1644.032698, "Income per Capita (Rounded)": 1644}];
-const DATA_SECOND = [{"state": "Malaysia", "idxs": 0, "pop": 32657100, "pop_18": 23528200, "pop_60": 3649000, "pop_12": 3111400, "pop_5": 3550500}, {"state": "Klang Valley", "idxs": 17, "pop": 8417800, "pop_18": 6181800, "pop_60": 827600, "pop_12": 719000, "pop_5": 895100}, {"state": "Johor", "idxs": 1, "pop": 3794200, "pop_18": 2733400, "pop_60": 445600, "pop_12": 353900, "pop_5": 409800}, {"state": "Kedah", "idxs": 2, "pop": 2193600, "pop_18": 1554800, "pop_60": 282300, "pop_12": 209700, "pop_5": 254100}, {"state": "Kelantan", "idxs": 3, "pop": 1928900, "pop_18": 1258700, "pop_60": 202100, "pop_12": 211200, "pop_5": 271700}, {"state": "Melaka", "idxs": 4, "pop": 937800, "pop_18": 683700, "pop_60": 123200, "pop_12": 85600, "pop_5": 98200}, {"state": "Negeri Sembilan", "idxs": 5, "pop": 1128900, "pop_18": 819200, "pop_60": 150300, "pop_12": 105900, "pop_5": 117200}, {"state": "Pahang", "idxs": 6, "pop": 1684700, "pop_18": 1188000, "pop_60": 198100, "pop_12": 172000, "pop_5": 192600}, {"state": "Perak", "idxs": 8, "pop": 2509000, "pop_18": 1878100, "pop_60": 410000, "pop_12": 228000, "pop_5": 239700}, {"state": "Perlis", "idxs": 9, "pop": 255500, "pop_18": 182100, "pop_60": 36300, "pop_12": 23000, "pop_5": 29100}, {"state": "Pulau Pinang", "idxs": 7, "pop": 1774200, "pop_18": 1374300, "pop_60": 247600, "pop_12": 139400, "pop_5": 155600}, {"state": "Sabah", "idxs": 12, "pop": 3832500, "pop_18": 2716600, "pop_60": 249000, "pop_12": 426200, "pop_5": 411000}, {"state": "Sarawak", "idxs": 13, "pop": 2824700, "pop_18": 2066100, "pop_60": 348300, "pop_12": 289200, "pop_5": 286000}, {"state": "Selangor", "idxs": 10, "pop": 6555100, "pop_18": 4776300, "pop_60": 607800, "pop_12": 569200, "pop_5": 715400}, {"state": "Terengganu", "idxs": 11, "pop": 1275200, "pop_18": 822000, "pop_60": 120100, "pop_12": 138000, "pop_5": 178700}, {"state": "W.P. Kuala Lumpur", "idxs": 14, "pop": 1746600, "pop_18": 1332700, "pop_60": 214200, "pop_12": 139200, "pop_5": 158300}, {"state": "W.P. Labuan", "idxs": 15, "pop": 100100, "pop_18": 69400, "pop_60": 8500, "pop_12": 10300, "pop_5": 11700}, {"state": "W.P. Putrajaya", "idxs": 16, "pop": 116100, "pop_18": 72800, "pop_60": 5600, "pop_12": 10600, "pop_5": 21400}];
+    <div class="grid-1">
+      <div class="card fade-in">
+        <h3 class="card-title">Population Concentration</h3>
+        <p class="card-desc">A Pareto chart revealing how concentrated Malaysia's population is. Bars show each state's population; the red line shows the cumulative national share. Notice how steep the curve is.</p>
+        <div id="viz-pop-concen" class="viz-container"></div>
+        <a href="01-population-concentration.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
+      </div>
+    </div>
 
-const GEOJSON_URL = 'https://raw.githubusercontent.com/mptwaktusolat/jakim.geojson/master/malaysia.state.geojson';
-const embedOpt = {
-  actions: { export: true, source: false, compiled: false },
-  renderer: 'svg'
-};
+    <div class="grid-1">
+      <div class="card fade-in">
+        <h3 class="card-title">Geographic Distribution</h3>
+        <p class="card-desc">Choropleth map revealing population concentration. The west coast clearly dominates
+          Malaysia's demographic landscape.</p>
+        <div id="viz-map-pop" class="viz-map"></div>
+        <a href="02-map-population.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
+      </div>
+    </div>
 
-// Base specs with inline data fallback
-const baseSpecs = {
-  'pop-rank': {"$schema":"https://vega.github.io/schema/vega-lite/v5.json","width":"container","height":400,"data":{"url":"population_clean.csv"},"transform":[{"calculate":"datum.Total_Pop_2022 * 1000","as":"population_absolute"}],"mark":{"type":"bar","cornerRadiusEnd":4},"encoding":{"y":{"field":"state","type":"ordinal","sort":{"op":"sum","field":"Total_Pop_2022","order":"descending"},"title":null,"axis":{"labelLimit":150}},"x":{"field":"Total_Pop_2022","type":"quantitative","title":"Population (thousands)","axis":{"format":","}},"color":{"field":"Total_Pop_2022","type":"quantitative","scale":{"scheme":"teals"},"legend":null},"tooltip":[{"field":"state","title":"State"},{"field":"population_absolute","title":"Total Population","format":","},{"field":"Total_Pop_2022","title":"Population (thousands)","format":","}]}},
+    <div class="insight fade-in">
+      <strong>Key Insight:</strong> The Pareto curve reveals extreme concentration: the top 3 states (Selangor, Johor, Sabah) account for nearly 50% of Malaysia's population, and the top 5 cover over two-thirds. This drives infrastructure demands and means federal policy must balance between serving dense urban corridors and sprawling rural states.
+    </div>
+  </section>
 
-  'map-pop': {"$schema":"https://vega.github.io/schema/vega-lite/v5.json","width":"container","height":500,"data":{"url":"population_clean.csv"},"transform":[{"calculate":"datum.state == 'Putrajaya' ? 'WP Putrajaya' : datum.state == 'Kuala Lumpur' ? 'WP K Lumpur' : datum.state == 'Labuan' ? 'WP Labuan' : datum.state == 'Penang' ? 'Pulau Pinang' : datum.state","as":"matched_state"}],"layer":[{"data":{"url":"https://raw.githubusercontent.com/mptwaktusolat/jakim.geojson/master/malaysia.state.geojson","format":{"type":"json","property":"features"}},"mark":{"type":"geoshape","stroke":"white","strokeWidth":0.5},"encoding":{"color":{"value":"#f0f0f0"}}},{"transform":[{"lookup":"matched_state","from":{"data":{"url":"https://raw.githubusercontent.com/mptwaktusolat/jakim.geojson/master/malaysia.state.geojson","format":{"type":"json","property":"features"}},"key":"properties.name","fields":["geometry"]}}],"mark":{"type":"geoshape","stroke":"white","strokeWidth":0.5},"encoding":{"shape":{"field":"geometry","type":"geojson"},"color":{"field":"Total_Pop_2022","type":"quantitative","scale":{"scheme":"blues","type":"sequential"},"legend":{"title":"Population (thousands)","format":","}},"tooltip":[{"field":"state","title":"State"},{"field":"Total_Pop_2022","title":"Population (thousands)","format":","},{"field":"Income per Capita (Rounded)","title":"Income per Capita (MYR)"}]}}],"projection":{"type":"mercator"},"config":{"view":{"stroke":null}}},
+  <section id="income" class="section">
+    <div class="section-header fade-in">
+      <div class="section-number">2</div>
+      <h2>The Income Divide</h2>
+      <p class="lead">Household income varies dramatically across Malaysia. Federal territories lead, while rural states
+        in the east and north face persistent economic challenges.</p>
+    </div>
 
-  'map-income': {"$schema":"https://vega.github.io/schema/vega-lite/v5.json","width":"container","height":500,"data":{"url":"population_clean.csv"},"transform":[{"calculate":"datum.state == 'Putrajaya' ? 'WP Putrajaya' : datum.state == 'Kuala Lumpur' ? 'WP K Lumpur' : datum.state == 'Labuan' ? 'WP Labuan' : datum.state == 'Penang' ? 'Pulau Pinang' : datum.state","as":"matched_state"}],"layer":[{"data":{"url":"https://raw.githubusercontent.com/mptwaktusolat/jakim.geojson/master/malaysia.state.geojson","format":{"type":"json","property":"features"}},"mark":{"type":"geoshape","stroke":"white","strokeWidth":0.5},"encoding":{"color":{"value":"#f5f5f5"}}},{"transform":[{"lookup":"matched_state","from":{"data":{"url":"https://raw.githubusercontent.com/mptwaktusolat/jakim.geojson/master/malaysia.state.geojson","format":{"type":"json","property":"features"}},"key":"properties.name","fields":["geometry"]}}],"mark":{"type":"geoshape","stroke":"white","strokeWidth":0.5},"encoding":{"shape":{"field":"geometry","type":"geojson"},"color":{"field":"income_median","type":"quantitative","scale":{"scheme":"greens","type":"sequential"},"legend":{"title":"Median Income (MYR)","format":","}},"tooltip":[{"field":"state","title":"State"},{"field":"income_median","title":"Median Income (MYR)","format":","},{"field":"income_mean","title":"Mean Income (MYR)","format":","}]}}],"projection":{"type":"mercator"},"config":{"view":{"stroke":null}}},
+    <div class="grid-1">
+      <div class="card fade-in">
+        <h3 class="card-title">Median Income Map</h3>
+        <p class="card-desc">Spatial view of median household income. Putrajaya and KL tower above all others,
+          reflecting their administrative and commercial roles.</p>
+        <div id="viz-map-income" class="viz-map"></div>
+        <a href="03-map-income.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
+      </div>
+    </div>
 
-  'mean-median': {"$schema":"https://vega.github.io/schema/vega-lite/v5.json","width":"container","height":450,"data":{"url":"population_clean.csv"},"transform":[{"fold":["income_mean","income_median"],"as":["measure","value"]}],"mark":{"type":"bar","cornerRadiusEnd":2},"encoding":{"x":{"field":"state","type":"ordinal","sort":{"op":"mean","field":"value","order":"descending"},"title":null,"axis":{"labelAngle":-45,"labelLimit":120}},"xOffset":{"field":"measure"},"y":{"field":"value","type":"quantitative","title":"Monthly Income (MYR)","axis":{"format":","}},"color":{"field":"measure","type":"nominal","title":"Measure","scale":{"domain":["income_mean","income_median"],"range":["#e15759","#4e79a7"]},"legend":{"labelExpr":"datum.value == 'income_mean' ? 'Mean' : 'Median'"}},"tooltip":[{"field":"state","title":"State"},{"field":"measure","title":"Measure","labelExpr":"datum.value == 'income_mean' ? 'Mean' : 'Median'"},{"field":"value","title":"Income (MYR)","format":","}]}},
+    <div class="grid-1">
+      <div class="card fade-in">
+        <h3 class="card-title">Mean vs. Median</h3>
+        <p class="card-desc">Grouped bars reveal the gap between mean and median income. Where the gap is wide,
+          inequality is likely higher—notice Labuan and Putrajaya.</p>
+        <div id="viz-mean-median" class="viz-container"></div>
+        <a href="04-mean-vs-median.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
+      </div>
+    </div>
 
-  'income-gap': {"$schema":"https://vega.github.io/schema/vega-lite/v5.json","width":"container","height":450,"data":{"url":"population_clean.csv"},"transform":[{"calculate":"datum.income_mean - datum.income_median","as":"income_gap"}],"layer":[{"mark":{"type":"rule","color":"#888","strokeWidth":2},"encoding":{"y":{"field":"state","type":"ordinal","sort":{"field":"income_gap","order":"descending"},"title":null},"x":{"field":"income_median","type":"quantitative","title":"Monthly Income (MYR)"},"x2":{"field":"income_mean"}}},{"mark":{"type":"circle","size":100,"color":"#e15759"},"encoding":{"y":{"field":"state","type":"ordinal","sort":{"field":"income_gap","order":"descending"}},"x":{"field":"income_mean","type":"quantitative"},"tooltip":[{"field":"state","title":"State"},{"field":"income_mean","title":"Mean Income (MYR)","format":","},{"field":"income_median","title":"Median Income (MYR)","format":","},{"field":"income_gap","title":"Gap (MYR)","format":","}]}},{"mark":{"type":"circle","size":100,"color":"#4e79a7"},"encoding":{"y":{"field":"state","type":"ordinal","sort":{"field":"income_gap","order":"descending"}},"x":{"field":"income_median","type":"quantitative"},"tooltip":[{"field":"state","title":"State"},{"field":"income_mean","title":"Mean Income (MYR)","format":","},{"field":"income_median","title":"Median Income (MYR)","format":","},{"field":"income_gap","title":"Gap (MYR)","format":","}]}}]},
+    <div class="grid-1">
+      <div class="card fade-in">
+        <h3 class="card-title">Income Gap Analysis</h3>
+        <p class="card-desc">Dumbbell plot showing the spread between mean and median. A wider gap suggests greater
+          income inequality within that state.</p>
+        <div id="viz-income-gap" class="viz-container"></div>
+        <a href="05-income-gap.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
+      </div>
+    </div>
 
-  'pop-income': {"$schema":"https://vega.github.io/schema/vega-lite/v5.json","width":"container","height":400,"data":{"url":"population_clean.csv"},"mark":{"type":"circle","opacity":0.7,"stroke":"black","strokeWidth":1},"encoding":{"x":{"field":"Total_Pop_2022","type":"quantitative","title":"Population (thousands)","scale":{"zero":false},"axis":{"format":","}},"y":{"field":"income_median","type":"quantitative","title":"Median Household Income (MYR)","scale":{"zero":false}},"size":{"field":"Income per Capita (Rounded)","type":"quantitative","title":"Income per Capita (MYR)","scale":{"range":[80,800]},"legend":{"orient":"right"}},"color":{"field":"state","type":"nominal","legend":null,"scale":{"scheme":"category20"}},"tooltip":[{"field":"state","title":"State"},{"field":"Total_Pop_2022","title":"Population (thousands)","format":","},{"field":"income_median","title":"Median Income (MYR)","format":","},{"field":"Income per Capita (Rounded)","title":"Income per Capita (MYR)"}]}},
+    <div class="insight insight-highlight fade-in">
+      <strong>Inequality Signal:</strong> Labuan shows the largest mean-median gap (MYR 1,346), suggesting a small
+      wealthy population skewing the average. Putrajaya and Kuala Lumpur also show significant gaps, reflecting their
+      roles as hubs for high-income professionals.
+    </div>
+  </section>
 
-  'per-capita': {"$schema":"https://vega.github.io/schema/vega-lite/v5.json","width":"container","height":450,"data":{"url":"population_clean.csv"},"mark":{"type":"point","filled":true,"size":120},"encoding":{"y":{"field":"state","type":"ordinal","sort":{"op":"mean","field":"Income per Capita (Rounded)","order":"descending"},"title":null},"x":{"field":"Income per Capita (Rounded)","type":"quantitative","title":"Income per Capita (MYR)","axis":{"format":","}},"color":{"field":"Income per Capita (Rounded)","type":"quantitative","scale":{"scheme":"goldred"},"legend":null},"tooltip":[{"field":"state","title":"State"},{"field":"Income per Capita (Rounded)","title":"Income per Capita (MYR)","format":","},{"field":"Total_Pop_2022","title":"Population (thousands)","format":","}]}},
+  <section id="comparison" class="section">
+    <div class="section-header fade-in">
+      <div class="section-number">3</div>
+      <h2>Connecting the Dots</h2>
+      <p class="lead">How do population size and income relate? Does a larger state mean richer residents? The data
+        reveals surprising patterns.</p>
+    </div>
 
-  'heatmap': {"$schema":"https://vega.github.io/schema/vega-lite/v5.json","width":"container","height":450,"data":{"url":"population_clean.csv"},"transform":[{"fold":["income_mean","income_median","Income per Capita (Rounded)"],"as":["metric","value"]},{"window":[{"op":"mean","field":"value","as":"mean_val"},{"op":"stdev","field":"value","as":"stdev_val"}],"groupby":["metric"],"frame":[null,null]},{"calculate":"(datum.value - datum.mean_val) / datum.stdev_val","as":"zscore"}],"mark":{"type":"rect","stroke":"white"},"encoding":{"x":{"field":"metric","type":"ordinal","title":null,"axis":{"labelExpr":"datum.value == 'income_mean' ? 'Mean Income' : datum.value == 'income_median' ? 'Median Income' : 'Income per Capita'"}},"y":{"field":"state","type":"ordinal","sort":{"op":"mean","field":"value","order":"descending"},"title":null},"color":{"field":"zscore","type":"quantitative","title":"Standard Deviations from Mean","scale":{"scheme":"redyellowgreen","domainMid":0},"legend":{"orient":"right"}},"tooltip":[{"field":"state","title":"State"},{"field":"metric","title":"Metric"},{"field":"value","title":"Value (MYR)","format":","},{"field":"zscore","title":"Z-Score","format":".2f"}]}},
+    <div class="grid-1">
+      <div class="card fade-in">
+        <h3 class="card-title">Population vs. Income</h3>
+        <p class="card-desc">Bubble chart exploring the relationship between population, median income, and income per
+          capita. Bubble size shows per-capita income.</p>
+        <div id="viz-pop-income" class="viz-container"></div>
+        <a href="06-population-vs-income.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
+      </div>
+    </div>
 
-  'distribution': {"$schema":"https://vega.github.io/schema/vega-lite/v5.json","title":{"text":"Income Breakdown by State","subtitle":"Top 8 states by median income • Small multiples for clear comparison","fontSize":16,"subtitleFontSize":11},"width":120,"height":180,"data":{"url":"population_clean.csv"},"transform":[{"filter":"datum.state == 'Kuala Lumpur' || datum.state == 'Putrajaya' || datum.state == 'Selangor' || datum.state == 'Labuan' || datum.state == 'Johor' || datum.state == 'Penang' || datum.state == 'Melaka' || datum.state == 'Terengganu'"},{"fold":["income_mean","income_median","Annual Household Income"],"as":["metric","value"]}],"mark":{"type":"bar","cornerRadiusEnd":2,"tooltip":true},"encoding":{"column":{"field":"state","type":"ordinal","title":null,"sort":{"op":"mean","field":"value","order":"descending"},"header":{"labelAngle":-45,"labelOrient":"bottom","labelPadding":5}},"x":{"field":"metric","type":"nominal","title":null,"axis":{"labelAngle":-30,"labelExpr":"datum.label == 'income_mean' ? 'Mean' : datum.label == 'income_median' ? 'Median' : 'Annual'","labelFontSize":9}},"y":{"field":"value","type":"quantitative","title":"Income (MYR)","axis":{"format":"s","tickCount":4}},"color":{"field":"metric","type":"nominal","legend":null,"scale":{"domain":["income_mean","income_median","Annual Household Income"],"range":["#e15759","#4e79a7","#f28e2c"]}},"tooltip":[{"field":"state","title":"State"},{"field":"metric","title":"Metric"},{"field":"value","title":"Value (MYR)","format":","}]},"config":{"view":{"stroke":"transparent"},"axis":{"domain":false,"ticks":false,"grid":true,"gridColor":"#eeeeee"}}},
+    <div class="grid-1">
+      <div class="card fade-in">
+        <h3 class="card-title">Income per Capita</h3>
+        <p class="card-desc">Dot plot ranking states by income per capita. Small territories (Labuan, Putrajaya) lead
+          due to high earners and small resident populations.</p>
+        <div id="viz-per-capita" class="viz-container"></div>
+        <a href="07-income-per-capita.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
+      </div>
+    </div>
 
-  'age': {"$schema":"https://vega.github.io/schema/vega-lite/v5.json","width":"container","height":480,"data":{"url":"population-second-version.csv"},"transform":[{"filter":"datum.state != 'Malaysia' && datum.state != 'Klang Valley'"},{"calculate":"datum.pop_60 / datum.pop","as":"elderly_rate"},{"fold":["pop_5","pop_12","pop_18","pop_60"],"as":["age_group","population"]},{"calculate":"datum.age_group == 'pop_5' ? '0-5 years' : datum.age_group == 'pop_12' ? '6-12 years' : datum.age_group == 'pop_18' ? '13-59 years' : '60+ years'","as":"age_label"},{"window":[{"op":"sum","field":"population","as":"cohort_total"}],"groupby":["state"],"frame":[null,null]},{"calculate":"datum.population / datum.cohort_total","as":"proportion"}],"mark":{"type":"bar","cornerRadiusEnd":2},"encoding":{"y":{"field":"state","type":"ordinal","sort":{"op":"mean","field":"elderly_rate","order":"descending"},"title":null,"axis":{"labelLimit":150}},"x":{"field":"population","type":"quantitative","aggregate":"sum","stack":"normalize","title":"Share of State Population","axis":{"format":".0%","grid":true,"gridColor":"#eeeeee"}},"color":{"field":"age_label","type":"nominal","title":"Age Cohort","scale":{"domain":["0-5 years","6-12 years","13-59 years","60+ years"],"range":["#FFB627","#2EC4B6","#3A86FF","#E71D36"]},"legend":{"orient":"top","direction":"horizontal","titleAnchor":"middle"}},"order":{"field":"age_group","type":"ordinal","sort":["pop_5","pop_12","pop_18","pop_60"]},"tooltip":[{"field":"state","title":"State"},{"field":"age_label","title":"Age Cohort"},{"field":"population","title":"Population","format":","},{"field":"cohort_total","title":"Cohort Total","format":","},{"field":"proportion","title":"Share of Cohorts","format":".1%"},{"field":"pop","title":"State Total Pop","format":","}]},"config":{"view":{"stroke":"transparent"},"axis":{"domain":false,"ticks":false}}}
-};
+    <div class="grid-1">
+      <div class="card fade-in">
+        <h3 class="card-title">Income Heatmap</h3>
+        <p class="card-desc">Normalised heatmap (z-scores) comparing three income metrics across all states. Red
+          indicates above-average, green below-average.</p>
+        <div id="viz-heatmap" class="viz-container"></div>
+        <a href="08-income-heatmap.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
+      </div>
+    </div>
 
-// Embed with inline data fallback
-function embedWithFallback(elementId, specKey, inlineData) {
-  const spec = JSON.parse(JSON.stringify(baseSpecs[specKey]));
-  spec.data = { values: inlineData };
-  vegaEmbed(elementId, spec, embedOpt).catch(err => {
-    console.error('Failed to embed', elementId, err);
-    document.querySelector(elementId).innerHTML = '<p style="color:#e15759;text-align:center;padding:40px;">Failed to load visualisation. Please check console.</p>';
-  });
-}
+    <div class="grid-1">
+      <div class="card fade-in">
+        <h3 class="card-title">Income Breakdown</h3>
+        <p class="card-desc">Small multiples showing mean, median, and annual household income for each state. Enables
+          direct state-to-state comparison.</p>
+        <div id="viz-distribution" class="viz-container-large"></div>
+        <a href="09-income-distribution.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
+      </div>
+    </div>
 
-// Embed all visualisations
-embedWithFallback('#viz-pop-rank', 'pop-rank', DATA_CLEAN);
-embedWithFallback('#viz-map-pop', 'map-pop', DATA_CLEAN);
-embedWithFallback('#viz-map-income', 'map-income', DATA_CLEAN);
-embedWithFallback('#viz-mean-median', 'mean-median', DATA_CLEAN);
-embedWithFallback('#viz-income-gap', 'income-gap', DATA_CLEAN);
-embedWithFallback('#viz-pop-income', 'pop-income', DATA_CLEAN);
-embedWithFallback('#viz-per-capita', 'per-capita', DATA_CLEAN);
-embedWithFallback('#viz-heatmap', 'heatmap', DATA_CLEAN);
-embedWithFallback('#viz-distribution', 'distribution', DATA_CLEAN);
-embedWithFallback('#viz-age', 'age', DATA_SECOND);
+    <div class="insight insight-warm fade-in">
+      <strong>Surprising Finding:</strong> Despite having Malaysia's largest population, Selangor ranks only middle-tier
+      in income per capita. Conversely, tiny Labuan and Putrajaya dominate per-capita metrics due to their specialised
+      economic functions and small residential bases.
+    </div>
+  </section>
 
-// Navigation
-function scrollToSection(id) {
-  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-}
+  <section id="structure" class="section">
+    <div class="section-header fade-in">
+      <div class="section-number">4</div>
+      <h2>Age & Demographics</h2>
+      <p class="lead">Age structure varies significantly across states, with implications for healthcare, education, and
+        future workforce planning.</p>
+    </div>
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add('visible');
-  });
-}, { threshold: 0.1 });
+    <div class="grid-1">
+      <div class="card fade-in">
+        <h3 class="card-title">Age Structure by State</h3>
+        <p class="card-desc">Stacked bars showing the proportion of four key age cohorts. States are sorted by elderly
+          (60+) population share—an indicator of aging pressure.</p>
+        <div id="viz-age" class="viz-container"></div>
+        <a href="10-age-structure.json" target="_blank" class="spec-link">View Vega-Lite Spec &#8599;</a>
+      </div>
+    </div>
 
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    <div class="insight fade-in">
+      <strong>Demographic Divide:</strong> Perak has the highest elderly proportion (16.3%), signaling future healthcare
+      and pension pressures. In contrast, Selangor and Johor maintain younger profiles, suggesting stronger future
+      workforce potential.
+    </div>
+  </section>
 
-const sections = ['hero', 'population', 'income', 'comparison', 'structure', 'conclusion'];
-const navDots = document.querySelectorAll('.nav-dot');
+  <section id="conclusion" class="section">
+    <div class="section-header fade-in">
+      <div class="section-number">5</div>
+      <h2>What This Tells Us</h2>
+      <p class="lead">Malaysia's states are not just different in size—they are economically and demographically
+        distinct nations within a nation.</p>
+    </div>
 
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(section => {
-    const element = document.getElementById(section);
-    if (element) {
-      const rect = element.getBoundingClientRect();
-      if (rect.top <= 200) current = section;
+    <div class="card fade-in" style="max-width: 800px; margin: 0 auto 32px;">
+      <h3 class="card-title" style="text-align: center;">Summary Findings</h3>
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-top: 24px;">
+        <div style="padding: 20px; background: #f7fafc; border-radius: 12px;">
+          <strong style="color: var(--primary); display: block; margin-bottom: 8px;">&#127963; Urban Premium</strong>
+          Federal territories (KL, Putrajaya, Labuan) consistently outearn states, reflecting the urban economic
+          advantage.
+        </div>
+        <div style="padding: 20px; background: #f7fafc; border-radius: 12px;">
+          <strong style="color: var(--primary); display: block; margin-bottom: 8px;">&#128202; Scale != Wealth</strong>
+          Large states like Selangor and Johor don't necessarily have the highest per-capita incomes. Population scale
+          and wealth are decoupled.
+        </div>
+        <div style="padding: 20px; background: #f7fafc; border-radius: 12px;">
+          <strong style="color: var(--primary); display: block; margin-bottom: 8px;">&#9888; Inequality Signals</strong>
+          Wide mean-median gaps in Labuan, Putrajaya, and KL suggest significant internal income disparities despite
+          high averages.
+        </div>
+        <div style="padding: 20px; background: #f7fafc; border-radius: 12px;">
+          <strong style="color: var(--primary); display: block; margin-bottom: 8px;">&#128116; Aging Challenge</strong>
+          States like Perak face aging demographics, while Selangor and Johor maintain younger, more dynamic
+          populations.
+        </div>
+      </div>
+    </div>
+
+    <div class="insight fade-in" style="max-width: 800px; margin: 0 auto;">
+      <strong>For Policymakers:</strong> These visualisations highlight the need for state-specific economic strategies.
+      A one-size-fits-all federal policy may fail to address the unique challenges of rural, aging, or high-inequality
+      states. Targeted interventions—such as eldercare infrastructure in Perak or income support in Kelantan—could be
+      more effective than blanket approaches.
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p><strong>Malaysia Population & Income Dashboard</strong></p>
+    <p>Data sourced from Department of Statistics Malaysia (2022)</p>
+    <p>Created for FIT2179 Data Visualisation, Monash University Malaysia</p>
+    <div class="credits">
+      <p>Built with Vega-Lite | Pure CSS | Inter & Playfair Display typography</p>
+      <p>GeoJSON: Malaysia Open Data (github.com/mptwaktusolat/jakim.geojson)</p>
+    </div>
+  </footer>
+
+  <script>
+    // ===== EMBEDDED FALLBACK DATA =====
+    const DATA_CLEAN = [{ "state": "Johor", "date": "1/1/2022", "income_mean": 8517, "income_median": 6879, "Total_Pop_2022": 1325.6, "Annual Household Income": 82548, "Income per Capita (MYR)": 62.27217864, "Income per Capita (Rounded)": 62 }, { "state": "Kedah", "date": "1/2/2022", "income_mean": 5550, "income_median": 4402, "Total_Pop_2022": 989.5, "Annual Household Income": 52824, "Income per Capita (MYR)": 53.38453765, "Income per Capita (Rounded)": 53 }, { "state": "Kelantan", "date": "1/3/2022", "income_mean": 4885, "income_median": 3614, "Total_Pop_2022": 707.3, "Annual Household Income": 43368, "Income per Capita (MYR)": 61.31485932, "Income per Capita (Rounded)": 61 }, { "state": "Melaka", "date": "1/4/2022", "income_mean": 8057, "income_median": 6210, "Total_Pop_2022": 419.4, "Annual Household Income": 74520, "Income per Capita (MYR)": 177.6824034, "Income per Capita (Rounded)": 178 }, { "state": "Negeri Sembilan", "date": "1/5/2022", "income_mean": 6788, "income_median": 5226, "Total_Pop_2022": 500.4, "Annual Household Income": 62712, "Income per Capita (MYR)": 125.323741, "Income per Capita (Rounded)": 125 }, { "state": "Pahang", "date": "1/6/2022", "income_mean": 5777, "income_median": 4753, "Total_Pop_2022": 523.8, "Annual Household Income": 57036, "Income per Capita (MYR)": 108.8888889, "Income per Capita (Rounded)": 109 }, { "state": "Perak", "date": "1/7/2022", "income_mean": 5779, "income_median": 4494, "Total_Pop_2022": 1631.5, "Annual Household Income": 53928, "Income per Capita (MYR)": 33.05424456, "Income per Capita (Rounded)": 33 }, { "state": "Perlis", "date": "1/8/2022", "income_mean": 5664, "income_median": 4713, "Total_Pop_2022": 125.5, "Annual Household Income": 56556, "Income per Capita (MYR)": 450.6454183, "Income per Capita (Rounded)": 451 }, { "state": "Penang", "date": "1/9/2022", "income_mean": 8267, "income_median": 6502, "Total_Pop_2022": 808.6, "Annual Household Income": 78024, "Income per Capita (MYR)": 96.49270344, "Income per Capita (Rounded)": 96 }, { "state": "Sabah", "date": "1/10/2022", "income_mean": 6171, "income_median": 4577, "Total_Pop_2022": 698.1, "Annual Household Income": 54924, "Income per Capita (MYR)": 78.67640739, "Income per Capita (Rounded)": 79 }, { "state": "Sarawak", "date": "1/11/2022", "income_mean": 6457, "income_median": 4978, "Total_Pop_2022": 1037.0, "Annual Household Income": 59736, "Income per Capita (MYR)": 57.60462874, "Income per Capita (Rounded)": 58 }, { "state": "Selangor", "date": "1/12/2022", "income_mean": 12233, "income_median": 9983, "Total_Pop_2022": 1696.4, "Annual Household Income": 119796, "Income per Capita (MYR)": 70.61777883, "Income per Capita (Rounded)": 71 }, { "state": "Terengganu", "date": "1/13/2022", "income_mean": 7248, "income_median": 5878, "Total_Pop_2022": 418.8, "Annual Household Income": 70536, "Income per Capita (MYR)": 168.4240688, "Income per Capita (Rounded)": 168 }, { "state": "Kuala Lumpur", "date": "1/14/2022", "income_mean": 13325, "income_median": 10234, "Total_Pop_2022": 982.9, "Annual Household Income": 122808, "Income per Capita (MYR)": 124.9445518, "Income per Capita (Rounded)": 125 }, { "state": "Labuan", "date": "1/15/2022", "income_mean": 8250, "income_median": 6904, "Total_Pop_2022": 52.9, "Annual Household Income": 82848, "Income per Capita (MYR)": 1566.124764, "Income per Capita (Rounded)": 1566 }, { "state": "Putrajaya", "date": "1/16/2022", "income_mean": 13473, "income_median": 10056, "Total_Pop_2022": 73.4, "Annual Household Income": 120672, "Income per Capita (MYR)": 1644.032698, "Income per Capita (Rounded)": 1644 }];
+    const DATA_SECOND = [{ "state": "Malaysia", "idxs": 0, "pop": 32657100, "pop_18": 23528200, "pop_60": 3649000, "pop_12": 3111400, "pop_5": 3550500 }, { "state": "Klang Valley", "idxs": 17, "pop": 8417800, "pop_18": 6181800, "pop_60": 827600, "pop_12": 719000, "pop_5": 895100 }, { "state": "Johor", "idxs": 1, "pop": 3794200, "pop_18": 2733400, "pop_60": 445600, "pop_12": 353900, "pop_5": 409800 }, { "state": "Kedah", "idxs": 2, "pop": 2193600, "pop_18": 1554800, "pop_60": 282300, "pop_12": 209700, "pop_5": 254100 }, { "state": "Kelantan", "idxs": 3, "pop": 1928900, "pop_18": 1258700, "pop_60": 202100, "pop_12": 211200, "pop_5": 271700 }, { "state": "Melaka", "idxs": 4, "pop": 937800, "pop_18": 683700, "pop_60": 123200, "pop_12": 85600, "pop_5": 98200 }, { "state": "Negeri Sembilan", "idxs": 5, "pop": 1128900, "pop_18": 819200, "pop_60": 150300, "pop_12": 105900, "pop_5": 117200 }, { "state": "Pahang", "idxs": 6, "pop": 1684700, "pop_18": 1188000, "pop_60": 198100, "pop_12": 172000, "pop_5": 192600 }, { "state": "Perak", "idxs": 8, "pop": 2509000, "pop_18": 1878100, "pop_60": 410000, "pop_12": 228000, "pop_5": 239700 }, { "state": "Perlis", "idxs": 9, "pop": 255500, "pop_18": 182100, "pop_60": 36300, "pop_12": 23000, "pop_5": 29100 }, { "state": "Pulau Pinang", "idxs": 7, "pop": 1774200, "pop_18": 1374300, "pop_60": 247600, "pop_12": 139400, "pop_5": 155600 }, { "state": "Sabah", "idxs": 12, "pop": 3832500, "pop_18": 2716600, "pop_60": 249000, "pop_12": 426200, "pop_5": 411000 }, { "state": "Sarawak", "idxs": 13, "pop": 2824700, "pop_18": 2066100, "pop_60": 348300, "pop_12": 289200, "pop_5": 286000 }, { "state": "Selangor", "idxs": 10, "pop": 6555100, "pop_18": 4776300, "pop_60": 607800, "pop_12": 569200, "pop_5": 715400 }, { "state": "Terengganu", "idxs": 11, "pop": 1275200, "pop_18": 822000, "pop_60": 120100, "pop_12": 138000, "pop_5": 178700 }, { "state": "W.P. Kuala Lumpur", "idxs": 14, "pop": 1746600, "pop_18": 1332700, "pop_60": 214200, "pop_12": 139200, "pop_5": 158300 }, { "state": "W.P. Labuan", "idxs": 15, "pop": 100100, "pop_18": 69400, "pop_60": 8500, "pop_12": 10300, "pop_5": 11700 }, { "state": "W.P. Putrajaya", "idxs": 16, "pop": 116100, "pop_18": 72800, "pop_60": 5600, "pop_12": 10600, "pop_5": 21400 }];
+
+    const GEOJSON_URL = 'https://raw.githubusercontent.com/mptwaktusolat/jakim.geojson/master/malaysia.state.geojson';
+    const embedOpt = {
+      actions: { export: true, source: false, compiled: false },
+      renderer: 'svg'
+    };
+
+    // Base specs with inline data fallback
+    const baseSpecs = {
+      'pop-concen': { "$schema": "https://vega.github.io/schema/vega-lite/v5.json", "title": { "text": "Population Concentration by State", "subtitle": "Bars = state population • Red line = cumulative % of national total", "fontSize": 16, "subtitleFontSize": 11 }, "width": "container", "height": 400, "data": { "url": "population_clean.csv" }, "transform": [{ "window": [{ "op": "sum", "field": "Total_Pop_2022", "as": "national_pop" }], "frame": [null, null] }, { "window": [{ "op": "sum", "field": "Total_Pop_2022", "as": "cumulative_pop" }], "sort": [{ "field": "Total_Pop_2022", "order": "descending" }], "frame": [null, 0] }, { "calculate": "datum.cumulative_pop / datum.national_pop * 100", "as": "cumulative_pct" }], "layer": [{ "mark": { "type": "bar", "cornerRadiusEnd": 4, "color": "#4e79a7", "tooltip": true }, "encoding": { "x": { "field": "state", "type": "ordinal", "sort": { "op": "sum", "field": "Total_Pop_2022", "order": "descending" }, "title": null, "axis": { "labelAngle": -45, "labelLimit": 120 } }, "y": { "field": "Total_Pop_2022", "type": "quantitative", "title": "Population (thousands)", "axis": { "format": ",.0f", "labelOverlap": "greedy" } }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "Total_Pop_2022", "title": "Population (thousands)", "format": ",.0f" }] } }, { "mark": { "type": "line", "color": "#e15759", "strokeWidth": 3, "point": { "filled": true, "size": 60, "color": "#e15759" } }, "encoding": { "x": { "field": "state", "type": "ordinal", "sort": { "op": "sum", "field": "Total_Pop_2022", "order": "descending" }, "title": null }, "y": { "field": "cumulative_pct", "type": "quantitative", "title": "Cumulative % of National Population", "scale": { "domain": [0, 105] }, "axis": { "format": ".0f", "titleColor": "#e15759", "labelOverlap": "greedy" } }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "cumulative_pct", "title": "Cumulative %", "format": ".1f" }] } }], "resolve": { "scale": { "y": "independent" } } },
+
+      'map-pop': { "$schema": "https://vega.github.io/schema/vega-lite/v5.json", "width": 1000, "height": 400, "projection": {"type": "mercator"}, "data": { "url": "population_clean.csv" }, "transform": [{ "calculate": "datum.state == 'Putrajaya' ? 'WP Putrajaya' : datum.state == 'Kuala Lumpur' ? 'WP K Lumpur' : datum.state == 'Labuan' ? 'WP Labuan' : datum.state == 'Penang' ? 'Pulau Pinang' : datum.state", "as": "matched_state" }], "layer": [{ "data": { "url": "https://raw.githubusercontent.com/mptwaktusolat/jakim.geojson/master/malaysia.state.geojson", "format": { "type": "json", "property": "features" } }, "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.5 }, "encoding": { "color": { "value": "#f0f0f0" } } }, { "transform": [{ "lookup": "matched_state", "from": { "data": { "url": "https://raw.githubusercontent.com/mptwaktusolat/jakim.geojson/master/malaysia.state.geojson", "format": { "type": "json", "property": "features" } }, "key": "properties.name", "fields": ["geometry"] } }], "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.5 }, "encoding": { "shape": { "field": "geometry", "type": "geojson" }, "color": { "field": "Total_Pop_2022", "type": "quantitative", "scale": { "scheme": "blues", "type": "sequential" }, "legend": { "title": "Population (thousands)", "format": ",.0f", "labelOverlap": "greedy" } }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "Total_Pop_2022", "title": "Population (thousands)", "format": ",.0f" }, { "field": "Income per Capita (Rounded)", "title": "Income per Capita (MYR)", "format": ",.0f" }] } }], "config": { "view": { "stroke": null } } },
+
+      'map-income': { "$schema": "https://vega.github.io/schema/vega-lite/v5.json", "width": 1000, "height": 400, "projection": {"type": "mercator"}, "data": { "url": "population_clean.csv" }, "transform": [{ "calculate": "datum.state == 'Putrajaya' ? 'WP Putrajaya' : datum.state == 'Kuala Lumpur' ? 'WP K Lumpur' : datum.state == 'Labuan' ? 'WP Labuan' : datum.state == 'Penang' ? 'Pulau Pinang' : datum.state", "as": "matched_state" }], "layer": [{ "data": { "url": "https://raw.githubusercontent.com/mptwaktusolat/jakim.geojson/master/malaysia.state.geojson", "format": { "type": "json", "property": "features" } }, "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.5 }, "encoding": { "color": { "value": "#f5f5f5" } } }, { "transform": [{ "lookup": "matched_state", "from": { "data": { "url": "https://raw.githubusercontent.com/mptwaktusolat/jakim.geojson/master/malaysia.state.geojson", "format": { "type": "json", "property": "features" } }, "key": "properties.name", "fields": ["geometry"] } }], "mark": { "type": "geoshape", "stroke": "white", "strokeWidth": 0.5 }, "encoding": { "shape": { "field": "geometry", "type": "geojson" }, "color": { "field": "income_median", "type": "quantitative", "scale": { "scheme": "greens", "type": "sequential" }, "legend": { "title": "Median Income (MYR)", "format": ",.0f", "labelOverlap": "greedy" } }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "income_median", "title": "Median Income (MYR)", "format": ",.0f" }, { "field": "income_mean", "title": "Mean Income (MYR)", "format": ",.0f" }] } }], "config": { "view": { "stroke": null } } },
+
+      'mean-median': { "$schema": "https://vega.github.io/schema/vega-lite/v5.json", "width": "container", "height": 450, "data": { "url": "population_clean.csv" }, "transform": [{ "fold": ["income_mean", "income_median"], "as": ["measure", "value"] }], "mark": { "type": "bar", "cornerRadiusEnd": 2 }, "encoding": { "x": { "field": "state", "type": "ordinal", "sort": { "op": "mean", "field": "value", "order": "descending" }, "title": null, "axis": { "labelAngle": -45, "labelLimit": 120 } }, "xOffset": { "field": "measure" }, "y": { "field": "value", "type": "quantitative", "title": "Monthly Income (MYR)", "axis": { "format": ",.0f", "labelOverlap": "greedy" } }, "color": { "field": "measure", "type": "nominal", "title": "Measure", "scale": { "domain": ["income_mean", "income_median"], "range": ["#e15759", "#4e79a7"] }, "legend": { "labelExpr": "datum.value == 'income_mean' ? 'Mean' : 'Median'" } }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "measure", "title": "Measure", "labelExpr": "datum.value == 'income_mean' ? 'Mean' : 'Median'" }, { "field": "value", "title": "Income (MYR)", "format": ",.0f" }] } },
+
+      'income-gap': { "$schema": "https://vega.github.io/schema/vega-lite/v5.json", "width": "container", "height": 450, "data": { "url": "population_clean.csv" }, "transform": [{ "calculate": "datum.income_mean - datum.income_median", "as": "income_gap" }], "layer": [{ "mark": { "type": "rule", "color": "#888", "strokeWidth": 2 }, "encoding": { "y": { "field": "state", "type": "ordinal", "sort": { "field": "income_gap", "order": "descending" }, "title": null }, "x": { "field": "income_median", "type": "quantitative", "title": "Monthly Income (MYR)", "axis": { "format": ",.0f", "labelOverlap": "greedy" } }, "x2": { "field": "income_mean" } } }, { "mark": { "type": "circle", "size": 100, "color": "#e15759" }, "encoding": { "y": { "field": "state", "type": "ordinal", "sort": { "field": "income_gap", "order": "descending" } }, "x": { "field": "income_mean", "type": "quantitative" }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "income_mean", "title": "Mean Income (MYR)", "format": ",.0f" }, { "field": "income_median", "title": "Median Income (MYR)", "format": ",.0f" }, { "field": "income_gap", "title": "Gap (MYR)", "format": ",.0f" }] } }, { "mark": { "type": "circle", "size": 100, "color": "#4e79a7" }, "encoding": { "y": { "field": "state", "type": "ordinal", "sort": { "field": "income_gap", "order": "descending" } }, "x": { "field": "income_median", "type": "quantitative" }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "income_mean", "title": "Mean Income (MYR)", "format": ",.0f" }, { "field": "income_median", "title": "Median Income (MYR)", "format": ",.0f" }, { "field": "income_gap", "title": "Gap (MYR)", "format": ",.0f" }] } }] },
+
+      'pop-income': { "$schema": "https://vega.github.io/schema/vega-lite/v5.json", "width": "container", "height": 400, "data": { "url": "population_clean.csv" }, "mark": { "type": "circle", "opacity": 0.7, "stroke": "black", "strokeWidth": 1 }, "encoding": { "x": { "field": "Total_Pop_2022", "type": "quantitative", "title": "Population (thousands)", "scale": { "zero": false }, "axis": { "format": ",.0f", "labelOverlap": "greedy" } }, "y": { "field": "income_median", "type": "quantitative", "title": "Median Household Income (MYR)", "scale": { "zero": false }, "axis": { "format": ",.0f", "labelOverlap": "greedy" } }, "size": { "field": "Income per Capita (Rounded)", "type": "quantitative", "title": "Income per Capita (MYR)", "scale": { "range": [80, 800] }, "legend": { "orient": "right" } }, "color": { "field": "state", "type": "nominal", "legend": null, "scale": { "scheme": "tableau20" } }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "Total_Pop_2022", "title": "Population (thousands)", "format": ",.0f" }, { "field": "income_median", "title": "Median Income (MYR)", "format": ",.0f" }, { "field": "Income per Capita (Rounded)", "title": "Income per Capita (MYR)", "format": ",.0f" }] } },
+
+      'per-capita': { "$schema": "https://vega.github.io/schema/vega-lite/v5.json", "width": "container", "height": 450, "data": { "url": "population_clean.csv" }, "mark": { "type": "point", "filled": true, "size": 120 }, "encoding": { "y": { "field": "state", "type": "ordinal", "sort": { "op": "mean", "field": "Income per Capita (Rounded)", "order": "descending" }, "title": null }, "x": { "field": "Income per Capita (Rounded)", "type": "quantitative", "title": "Income per Capita (MYR)", "axis": { "format": ",.0f", "labelOverlap": "greedy" } }, "color": { "field": "Income per Capita (Rounded)", "type": "quantitative", "scale": { "scheme": "goldred" }, "legend": null }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "Income per Capita (Rounded)", "title": "Income per Capita (MYR)", "format": ",.0f" }, { "field": "Total_Pop_2022", "title": "Population (thousands)", "format": ",.0f" }] } },
+
+      'heatmap': { "$schema": "https://vega.github.io/schema/vega-lite/v5.json", "width": "container", "height": 450, "data": { "url": "population_clean.csv" }, "transform": [{ "fold": ["income_mean", "income_median", "Income per Capita (Rounded)"], "as": ["metric", "value"] }, { "window": [{ "op": "mean", "field": "value", "as": "mean_val" }, { "op": "stdev", "field": "value", "as": "stdev_val" }], "groupby": ["metric"], "frame": [null, null] }, { "calculate": "(datum.value - datum.mean_val) / datum.stdev_val", "as": "zscore" }], "mark": { "type": "rect", "stroke": "white" }, "encoding": { "x": { "field": "metric", "type": "ordinal", "title": null, "axis": { "labelExpr": "datum.value == 'income_mean' ? 'Mean Income' : datum.value == 'income_median' ? 'Median Income' : 'Income per Capita'" } }, "y": { "field": "state", "type": "ordinal", "sort": { "op": "mean", "field": "value", "order": "descending" }, "title": null }, "color": { "field": "zscore", "type": "quantitative", "title": "Standard Deviations from Mean", "scale": { "scheme": "blueorange", "domainMid": 0 }, "legend": { "orient": "right" } }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "metric", "title": "Metric" }, { "field": "value", "title": "Value (MYR)", "format": ",.0f" }, { "field": "zscore", "title": "Z-Score", "format": ".2f" }] } },
+
+      'distribution': { "$schema": "https://vega.github.io/schema/vega-lite/v5.json", "title": { "text": "Income Breakdown by State", "subtitle": "Top 8 states by median income • Small multiples for clear comparison", "fontSize": 16, "subtitleFontSize": 11 }, "width": 100, "height": 300, "data": { "url": "population_clean.csv" }, "transform": [{ "filter": "datum.state == 'Kuala Lumpur' || datum.state == 'Putrajaya' || datum.state == 'Selangor' || datum.state == 'Labuan' || datum.state == 'Johor' || datum.state == 'Penang' || datum.state == 'Melaka' || datum.state == 'Terengganu' || datum.state == 'Penang' || datum.state == 'Melaka' || datum.state == 'Terengganu'" }, { "fold": ["income_mean", "income_median", "Annual Household Income"], "as": ["metric", "value"] }], "mark": { "type": "bar", "cornerRadiusEnd": 2, "tooltip": true }, "encoding": { "column": { "field": "state", "type": "ordinal", "title": null, "sort": { "op": "mean", "field": "value", "order": "descending" }, "header": { "labelAngle": 0, "labelOrient": "bottom", "labelPadding": 15 } }, "x": { "field": "metric", "type": "nominal", "title": null, "axis": { "labelAngle": 0, "labelExpr": "datum.label == 'income_mean' ? 'Mean' : datum.label == 'income_median' ? 'Median' : 'Annual'", "labelFontSize": 9 } }, "y": { "field": "value", "type": "quantitative", "title": "Income (MYR)", "axis": { "format": ",.0f", "tickCount": 6, "labelOverlap": "greedy" } }, "color": { "field": "metric", "type": "nominal", "legend": null, "scale": { "domain": ["income_mean", "income_median", "Annual Household Income"], "range": ["#e15759", "#4e79a7", "#f28e2c"] } }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "metric", "title": "Metric" }, { "field": "value", "title": "Value (MYR)", "format": ",.0f" }] }, "config": { "view": { "stroke": "transparent" }, "axis": { "domain": false, "ticks": false, "grid": true, "gridColor": "#eeeeee" } } },
+
+      'age': { "$schema": "https://vega.github.io/schema/vega-lite/v5.json", "width": "container", "height": 480, "data": { "url": "population-second-version.csv" }, "transform": [{ "filter": "datum.state != 'Malaysia' && datum.state != 'Klang Valley'" }, { "calculate": "datum.pop_60 / datum.pop", "as": "elderly_rate" }, { "fold": ["pop_5", "pop_12", "pop_18", "pop_60"], "as": ["age_group", "population"] }, { "calculate": "datum.age_group == 'pop_5' ? '0-5 years' : datum.age_group == 'pop_12' ? '6-12 years' : datum.age_group == 'pop_18' ? '13-59 years' : '60+ years'", "as": "age_label" }, { "window": [{ "op": "sum", "field": "population", "as": "cohort_total" }], "groupby": ["state"], "frame": [null, null] }, { "calculate": "datum.population / datum.cohort_total", "as": "proportion" }], "mark": { "type": "bar", "cornerRadiusEnd": 2 }, "encoding": { "y": { "field": "state", "type": "ordinal", "sort": { "op": "mean", "field": "elderly_rate", "order": "descending" }, "title": null, "axis": { "labelLimit": 150 } }, "x": { "field": "population", "type": "quantitative", "aggregate": "sum", "title": "Population", "axis": { "format": ",.0f", "grid": true, "gridColor": "#eeeeee" } }, "color": { "field": "age_label", "type": "nominal", "title": "Age Cohort", "scale": { "domain": ["0-5 years", "6-12 years", "13-59 years", "60+ years"], "range": ["#FFB627", "#2EC4B6", "#3A86FF", "#a41de7"] }, "legend": { "orient": "top", "direction": "horizontal", "titleAnchor": "middle" } }, "order": { "field": "age_group", "type": "ordinal", "sort": ["pop_5", "pop_12", "pop_18", "pop_60"] }, "tooltip": [{ "field": "state", "title": "State" }, { "field": "age_label", "title": "Age Cohort" }, { "field": "population", "title": "Population", "format": ",.0f" }, { "field": "cohort_total", "title": "Cohort Total", "format": ",.0f" }, { "field": "proportion", "title": "Proportion", "format": ".2f" }, { "field": "pop", "title": "State Total Pop", "format": ",.0f" }] }, "config": { "view": { "stroke": "transparent" }, "axis": { "domain": false, "ticks": false } } }
+    };
+
+    // Embed with inline data fallback
+    function embedWithFallback(elementId, specKey, inlineData) {
+      const spec = JSON.parse(JSON.stringify(baseSpecs[specKey]));
+      spec.data = { values: inlineData };
+      vegaEmbed(elementId, spec, embedOpt).catch(err => {
+        console.error('Failed to embed', elementId, err);
+        document.querySelector(elementId).innerHTML = '<p style="color:#e15759;text-align:center;padding:40px;">Failed to load visualisation. Please check console.</p>';
+      });
     }
-  });
-  navDots.forEach((dot, index) => {
-    dot.classList.toggle('active', sections[index] === current);
-  });
-});
-</script>
+
+    // Embed all visualisations
+    embedWithFallback('#viz-pop-concen', 'pop-concen', DATA_CLEAN);
+    embedWithFallback('#viz-map-pop', 'map-pop', DATA_CLEAN);
+    embedWithFallback('#viz-map-income', 'map-income', DATA_CLEAN);
+    embedWithFallback('#viz-mean-median', 'mean-median', DATA_CLEAN);
+    embedWithFallback('#viz-income-gap', 'income-gap', DATA_CLEAN);
+    embedWithFallback('#viz-pop-income', 'pop-income', DATA_CLEAN);
+    embedWithFallback('#viz-per-capita', 'per-capita', DATA_CLEAN);
+    embedWithFallback('#viz-heatmap', 'heatmap', DATA_CLEAN);
+    embedWithFallback('#viz-distribution', 'distribution', DATA_CLEAN);
+    embedWithFallback('#viz-age', 'age', DATA_SECOND);
+
+    // Navigation
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    const sections = ['hero', 'population', 'income', 'comparison', 'structure', 'conclusion'];
+    const navDots = document.querySelectorAll('.nav-dot');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const element = document.getElementById(section);
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          if (rect.top <= 200) current = section;
+        }
+      });
+      navDots.forEach((dot, index) => {
+        dot.classList.toggle('active', sections[index] === current);
+      });
+    });
+  </script>
 
 </body>
+
 </html>

@@ -2,69 +2,163 @@
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "title": {
     "text": "Age Structure Across Malaysian States",
-    "subtitle": "Sorted by share of elderly residents (60+) • 2022",
+    "subtitle": "Sorted by share of elderly residents (60+) • 2022 • Absolute population counts",
     "fontSize": 18,
     "subtitleFontSize": 12,
     "anchor": "middle"
   },
   "width": 650,
   "height": 480,
-  "data": {"url": "population-second-version.csv"},
+  "data": {
+    "url": "data/population-second-version.csv"
+  },
   "transform": [
-    {"filter": "datum.state != 'Malaysia' && datum.state != 'Klang Valley'"},
-    {"calculate": "datum.pop_60 / datum.pop", "as": "elderly_rate"},
-    {"fold": ["pop_5", "pop_12", "pop_18", "pop_60"], "as": ["age_group", "population"]},
-    {"calculate": "datum.age_group == 'pop_5' ? '0–5 years' : datum.age_group == 'pop_12' ? '6–12 years' : datum.age_group == 'pop_18' ? '13–59 years' : '60+ years'", "as": "age_label"},
     {
-      "window": [{"op": "sum", "field": "population", "as": "cohort_total"}],
-      "groupby": ["state"],
-      "frame": [null, null]
+      "filter": "datum.state != 'Malaysia' && datum.state != 'Klang Valley'"
     },
-    {"calculate": "datum.population / datum.cohort_total", "as": "proportion"}
+    {
+      "calculate": "datum.pop_60 / datum.pop",
+      "as": "elderly_rate"
+    },
+    {
+      "fold": [
+        "pop_5",
+        "pop_12",
+        "pop_18",
+        "pop_60"
+      ],
+      "as": [
+        "age_group",
+        "population"
+      ]
+    },
+    {
+      "calculate": "datum.age_group == 'pop_5' ? '0-5 years' : datum.age_group == 'pop_12' ? '6-12 years' : datum.age_group == 'pop_18' ? '13-59 years' : '60+ years'",
+      "as": "age_label"
+    },
+    {
+      "window": [
+        {
+          "op": "sum",
+          "field": "population",
+          "as": "cohort_total"
+        }
+      ],
+      "groupby": [
+        "state"
+      ],
+      "frame": [
+        null,
+        null
+      ]
+    },
+    {
+      "calculate": "datum.population / datum.cohort_total",
+      "as": "proportion"
+    }
   ],
-  "mark": {"type": "bar", "cornerRadiusEnd": 2},
+  "mark": {
+    "type": "bar",
+    "cornerRadiusEnd": 2
+  },
   "encoding": {
     "y": {
       "field": "state",
       "type": "ordinal",
-      "sort": {"op": "mean", "field": "elderly_rate", "order": "descending"},
+      "sort": {
+        "op": "mean",
+        "field": "elderly_rate",
+        "order": "descending"
+      },
       "title": null,
-      "axis": {"labelLimit": 150}
+      "axis": {
+        "labelLimit": 150
+      }
     },
     "x": {
       "field": "population",
       "type": "quantitative",
       "aggregate": "sum",
-      "stack": "normalize",
-      "title": "Share of State Population",
-      "axis": {"format": ".0%", "grid": true, "gridColor": "#eeeeee"}
+      "stack": null,
+      "title": "Population",
+      "axis": {
+        "format": ",.0f",
+        "grid": true,
+        "gridColor": "#eeeeee"
+      }
     },
     "color": {
       "field": "age_label",
       "type": "nominal",
       "title": "Age Cohort",
       "scale": {
-        "domain": ["0–5 years", "6–12 years", "13–59 years", "60+ years"],
-        "range": ["#FFB627", "#2EC4B6", "#3A86FF", "#E71D36"]
+        "domain": [
+          "0-5 years",
+          "6-12 years",
+          "13-59 years",
+          "60+ years"
+        ],
+        "range": [
+          "#FFB627",
+          "#2EC4B6",
+          "#3A86FF",
+          "#E71D36"
+        ]
       },
-      "legend": {"orient": "top", "direction": "horizontal", "titleAnchor": "middle"}
+      "legend": {
+        "orient": "top",
+        "direction": "horizontal",
+        "titleAnchor": "middle"
+      }
     },
     "order": {
       "field": "age_group",
       "type": "ordinal",
-      "sort": ["pop_5", "pop_12", "pop_18", "pop_60"]
+      "sort": [
+        "pop_5",
+        "pop_12",
+        "pop_18",
+        "pop_60"
+      ]
     },
     "tooltip": [
-      {"field": "state", "title": "State"},
-      {"field": "age_label", "title": "Age Cohort"},
-      {"field": "population", "title": "Population", "format": ","},
-      {"field": "cohort_total", "title": "Cohort Total", "format": ","},
-      {"field": "proportion", "title": "Share of Cohorts", "format": ".1%"},
-      {"field": "pop", "title": "State Total Pop", "format": ","}
+      {
+        "field": "state",
+        "title": "State"
+      },
+      {
+        "field": "age_label",
+        "title": "Age Cohort"
+      },
+      {
+        "field": "population",
+        "title": "Population",
+        "format": ","
+      },
+      {
+        "field": "cohort_total",
+        "title": "Cohort Total",
+        "format": ","
+      },
+      {
+        "field": "proportion",
+        "title": "Proportion",
+        "format": ".2f"
+      },
+      {
+        "field": "pop",
+        "title": "State Total Pop",
+        "format": ","
+      }
     ]
   },
   "config": {
-    "view": {"stroke": "transparent"},
-    "axis": {"domain": false, "ticks": false}
+    "view": {
+      "stroke": "transparent"
+    },
+    "axis": {
+      "domain": false,
+      "ticks": false
+    }
   }
 }

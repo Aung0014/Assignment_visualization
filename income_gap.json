@@ -28,9 +28,9 @@
         "x": {"field": "income_mean", "type": "quantitative"},
         "tooltip": [
           {"field": "state", "title": "State"},
-          {"field": "income_mean", "title": "Mean Income (MYR)", "format": ","},
-          {"field": "income_median", "title": "Median Income (MYR)", "format": ","},
-          {"field": "income_gap", "title": "Gap (MYR)", "format": ","}
+          {"field": "income_mean", "title": "Mean Income (MYR)", "format": ",.0f"},
+          {"field": "income_median", "title": "Median Income (MYR)", "format": ",.0f"},
+          {"field": "income_gap", "title": "Gap (MYR)", "format": ",.0f"}
         ]
       }
     },
@@ -41,9 +41,9 @@
         "x": {"field": "income_median", "type": "quantitative"},
         "tooltip": [
           {"field": "state", "title": "State"},
-          {"field": "income_mean", "title": "Mean Income (MYR)", "format": ","},
-          {"field": "income_median", "title": "Median Income (MYR)", "format": ","},
-          {"field": "income_gap", "title": "Gap (MYR)", "format": ","}
+          {"field": "income_mean", "title": "Mean Income (MYR)", "format": ",.0f"},
+          {"field": "income_median", "title": "Median Income (MYR)", "format": ",.0f"},
+          {"field": "income_gap", "title": "Gap (MYR)", "format": ",.0f"}
         ]
       }
     }
